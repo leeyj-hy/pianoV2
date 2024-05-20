@@ -5,8 +5,12 @@
 #include <unistd.h>
 #include <termios.h>
 #include <cstring>
+#include <functional>
 
-void ComPortHandler(const std::string& portName) {
+// 콜백 함수 타입 정의
+typedef std::function<void(const std::string&, uint8_t)> ReadCallback;
+
+void ComPortHandler(const std::string& portName, ReadCallback callback) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
         std::cerr << "Error opening " << portName << ": " << strerror(errno) << std::endl;
@@ -46,19 +50,31 @@ void ComPortHandler(const std::string& portName) {
     }
 
     // Communication
-    char buffer[256];
+    uint8_t buffer;
     while (true) {
-        int n = read(fd, buffer, sizeof(buffer));
+        int n = read(fd, &buffer, 1);
         if (n > 0) {
-            buffer[n] = '\0';
-            std::cout << portName << " received: " << buffer << std::endl;
+            callback(portName, buffer);
         }
-        std::string dataToSend = "Hello from " + portName;
-        write(fd, dataToSend.c_str(), dataToSend.size());
-        usleep(1000000);  // Sleep for 1 second
+        usleep(100000);  // Sleep for 0.1 second
     }
 
     close(fd);
+}
+
+void WriteByte(const std::string& portName, uint8_t data) {
+    int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
+    if (fd < 0) {
+        std::cerr << "Error opening " << portName << " for writing: " << strerror(errno) << std::endl;
+        return;
+    }
+    
+    write(fd, &data, 1);
+    close(fd);
+}
+
+void ReadCallbackFunction(const std::string& portName, uint8_t data) {
+    std::cout << portName << " received: 0x" << std::hex << static_cast<int>(data) << std::dec << std::endl;
 }
 
 int main() {
@@ -68,8 +84,12 @@ int main() {
     std::vector<std::string> portNames = {"/dev/ttyUSB0", "/dev/ttyUSB1"};
 
     for (const auto& portName : portNames) {
-        threads.emplace_back(ComPortHandler, portName);
+        threads.emplace_back(ComPortHandler, portName, ReadCallbackFunction);
     }
+
+    // Example of writing data to ports
+    WriteByte("/dev/ttyUSB0", 0x41);  // Send 'A' (0x41 in hex)
+    WriteByte("/dev/ttyUSB1", 0x42);  // Send 'B' (0x42 in hex)
 
     for (auto& t : threads) {
         t.join();

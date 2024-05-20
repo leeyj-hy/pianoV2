@@ -1,0 +1,3 @@
+/home/yj/piano2/CMakeFiles/rebuild_cache.dir
+/home/yj/piano2/CMakeFiles/edit_cache.dir
+/home/yj/piano2/CMakeFiles/PIANO_V2.dir
