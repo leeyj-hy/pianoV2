@@ -22,4 +22,4 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(PIANO_V2 ${LIBSERIALPORT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # include 디렉토리 설정
-target_include_directories(PIANO_V2 PRIVATE ${LIBSERIALPORT_INCLUDE_DIRS})
+target_include_directories(PIANO_V2 PRIVATE ${LIBSERIALPORT_INCLUDE_DIRS} include)

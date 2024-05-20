@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIE
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/yj/piano2/include 
 

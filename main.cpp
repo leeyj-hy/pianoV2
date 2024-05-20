@@ -6,9 +6,10 @@
 #include <termios.h>
 #include <cstring>
 #include <functional>
+#include "Modbus.h"  // Modbus.h 헤더 파일 포함
 
 // 콜백 함수 타입 정의
-typedef std::function<void(const std::string&, uint8_t)> ReadCallback;
+typedef std::function<void(const std::string&, const std::vector<uint8_t>&)> ReadCallback;
 
 void ComPortHandler(const std::string& portName, ReadCallback callback) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
@@ -50,31 +51,55 @@ void ComPortHandler(const std::string& portName, ReadCallback callback) {
     }
 
     // Communication
-    uint8_t buffer;
+    std::vector<uint8_t> buffer(6);  // 4 bytes data + 2 bytes CRC
     while (true) {
-        int n = read(fd, &buffer, 1);
+        int n = read(fd, buffer.data(), buffer.size());
         if (n > 0) {
+            buffer.resize(n);
             callback(portName, buffer);
         }
-        usleep(100000);  // Sleep for 0.1 second
     }
 
     close(fd);
 }
 
-void WriteByte(const std::string& portName, uint8_t data) {
+void WriteMessage(const std::string& portName, std::vector<uint8_t> message) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
         std::cerr << "Error opening " << portName << " for writing: " << strerror(errno) << std::endl;
         return;
     }
-    
-    write(fd, &data, 1);
+
+    if (message.size() >= 4) {
+        // 상위 4바이트에 대해 CRC 계산
+        uint16_t crc = crc_modbus(message.data(), 4);
+        // CRC 결과를 메시지의 마지막 2바이트에 추가
+        message.push_back(crc & 0xFF);        // CRC LSB
+        message.push_back((crc >> 8) & 0xFF); // CRC MSB
+    } else {
+        std::cerr << "Message length is less than 4 bytes." << std::endl;
+        close(fd);
+        return;
+    }
+
+    write(fd, message.data(), message.size());
     close(fd);
+
+    // 터미널에 전송된 메시지를 출력
+    std::cout << "Sent to " << portName << ": ";
+    for (uint8_t byte : message) {
+        std::cout << "0x" << std::hex << static_cast<int>(byte) << " ";
+    }
+    std::cout << std::dec << std::endl;
 }
 
-void ReadCallbackFunction(const std::string& portName, uint8_t data) {
-    std::cout << portName << " received: 0x" << std::hex << static_cast<int>(data) << std::dec << std::endl;
+void ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data) {
+    /*std::cout << portName << " received: ";
+    for (uint8_t byte : data) {
+        std::cout << "0x" << std::hex << static_cast<int>(byte) << " ";
+    }
+    std::cout << std::dec << std::endl;
+    */
 }
 
 int main() {
@@ -87,9 +112,19 @@ int main() {
         threads.emplace_back(ComPortHandler, portName, ReadCallbackFunction);
     }
 
-    // Example of writing data to ports
-    WriteByte("/dev/ttyUSB0", 0x41);  // Send 'A' (0x41 in hex)
-    WriteByte("/dev/ttyUSB1", 0x42);  // Send 'B' (0x42 in hex)
+    // Example of writing a 6-byte message to ports (4 bytes data + 2 bytes CRC)
+    std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x1e};  // 임의의 데이터
+    for (int i = 1; i < 16; i++) {
+      for (const auto& portName : portNames) {
+          message[1] = i;
+          if(portName=="/dev/ttyUSB0")
+            message[0] = 1;
+          else if(portName=="/dev/ttyUSB1")
+            message[0] = 2;
+          WriteMessage(portName, message);
+        }
+        usleep(200000);
+    }
 
     for (auto& t : threads) {
         t.join();
