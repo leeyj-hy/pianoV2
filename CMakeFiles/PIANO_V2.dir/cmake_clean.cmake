@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/PIANO_V2.dir/main.cpp.o"
+  "CMakeFiles/PIANO_V2.dir/main.cpp.o.d"
   "PIANO_V2"
   "PIANO_V2.pdb"
 )
