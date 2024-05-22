@@ -10,7 +10,6 @@
 #include "Modbus.h"  // Modbus.h 헤더 파일 포함
 
 using namespace tinyxml2;
-
 // 콜백 함수 타입 정의
 typedef std::function<void(const std::string&, const std::vector<uint8_t>&)> ReadCallback;
 
@@ -19,6 +18,9 @@ struct MotorParameter{
   int homePosition;
   int plusDir;
 };
+
+int _isM12Init=0;
+int _isM3Init = 0;
 
 void ComPortHandler(const std::string& portName, ReadCallback callback) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
@@ -156,34 +158,98 @@ void InitializeMotor(const MotorParameter& param) {
 }
 
 int main() {
+
+  char response = 0;
     std::vector<std::thread> threads;
 
     // Example ports, replace with actual port names on your system
-    std::vector<std::string> portNames = {"/dev/ttyACM0", "/dev/ttyACM1"};
+    std::vector<std::string> portNames = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2"};  //ttyACM
 
     for (const auto& portName : portNames) {
         threads.emplace_back(ComPortHandler, portName, ReadCallbackFunction);
     }
 
     // Read motor parameters from XML file
-    std::vector<MotorParameter> motorParameters = ReadMotorParametersFromXML("Parameter/parameters.xml");
+    // std::string paramFilePath = "/home/yj/piano2/Parameter/hand1param.xml";
+    // std::cout << "Loading parameters from: " << paramFilePath << std::endl;
+    // std::vector<MotorParameter> motorParameters = ReadMotorParametersFromXML(paramFilePath);
 
+    // if (motorParameters.empty()) {
+    //     std::cerr << "No motor parameters found. Exiting." << std::endl;
+    //     return 1;
+    // }
+    // for(const auto& param : motorParameters){
+    //   InitializeMotor(param);
+    // }
+    
     // Example of writing a 6-byte message to ports (4 bytes data + 2 bytes CRC)
-    std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x05};  // 임의의 데이터
-    for (int i = 1; i < 16; i++) {
-      for (const auto& portName : portNames) {
-          message[1] = i;
-          if(portName=="/dev/ttyACM0")
-            message[0] = 1;
-          else if(portName=="/dev/ttyACM1")
-            message[0] = 2;
-          WriteMessage(portName, message);
+    
+    while(!_isM12Init){
+      std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x05};  // 임의의 데이터
+      for (int i = 1; i < 16; i++) {
+        for (const auto& portName : portNames) {
+            message[1] = i;
+            if(portName=="/dev/ttyUSB0")
+              message[0] = 1;
+            else if(portName=="/dev/ttyUSB1")
+              message[0] = 2;
+            WriteMessage(portName, message);
+          }
+          usleep(200000);
+      }
+      
+      std::cout << "Module 1, 2 init End"<<std::endl;
+      std::cout << "Progress to Module 3 Init sequence? [y/n]"<<std::endl;
+      
+      std::cin>>response;
+
+      if(response =='y' | response == 'Y')
+      {
+        std::cout << "Module 1, 2 init done!"<<std::endl;
+        
+        _isM12Init=1;
+        break;
+      }
+      else if(response == 'n' | response == 'N')
+      {
+        std::cout << "Module 1, 2 init Restart!"<<std::endl;
+        
+      }
+      else{
+        std::cout << "No valid input! please retry!"<<std::endl;
+      }
+    }
+    
+    while(!_isM3Init)
+    {
+      std::vector<uint8_t> message={0x03, 0x30, 0x10, 0x10};
+      response = 0;
+      std::cout << "Module 3 init is going to start!"<<std::endl;
+      std::cout << "Remove every finger stuck??"<<std::endl;
+
+      std::cin>>response;
+
+      if(response =='y' | response == 'Y')
+      {
+        std::cout << "Module 3 init start"<<std::endl;
+        
+      }
+      else{
+        std::cout << "No valid input! please retry!"<<std::endl;
+        while(1){
+
         }
-        usleep(200000);
+      }
+      const auto& portName = "/dev/ttyUSB2";
+      WriteMessage(portName, message);
     }
 
     for (auto& t : threads) {
         t.join();
+    }
+
+    while(1){
+
     }
 
     return 0;
