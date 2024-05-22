@@ -27,8 +27,8 @@ void ComPortHandler(const std::string& portName, ReadCallback callback) {
         return;
     }
 
-    cfsetospeed(&tty, B9600);
-    cfsetispeed(&tty, B9600);
+    cfsetospeed(&tty, B115200);
+    cfsetispeed(&tty, B115200);
 
     tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
     tty.c_iflag &= ~IGNBRK;         // ignore break signal
@@ -106,20 +106,20 @@ int main() {
     std::vector<std::thread> threads;
 
     // Example ports, replace with actual port names on your system
-    std::vector<std::string> portNames = {"/dev/ttyUSB0", "/dev/ttyUSB1"};
+    std::vector<std::string> portNames = {"/dev/ttyACM0", "/dev/ttyACM1"};
 
     for (const auto& portName : portNames) {
         threads.emplace_back(ComPortHandler, portName, ReadCallbackFunction);
     }
 
     // Example of writing a 6-byte message to ports (4 bytes data + 2 bytes CRC)
-    std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x1e};  // 임의의 데이터
+    std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x05};  // 임의의 데이터
     for (int i = 1; i < 16; i++) {
       for (const auto& portName : portNames) {
           message[1] = i;
-          if(portName=="/dev/ttyUSB0")
+          if(portName=="/dev/ttyACM0")
             message[0] = 1;
-          else if(portName=="/dev/ttyUSB1")
+          else if(portName=="/dev/ttyACM1")
             message[0] = 2;
           WriteMessage(portName, message);
         }
