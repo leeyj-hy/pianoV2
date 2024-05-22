@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/PIANO_V2.dir/main.cpp.o -o PIANO_V2  -lserialport 
