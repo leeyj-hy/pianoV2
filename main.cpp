@@ -6,10 +6,19 @@
 #include <termios.h>
 #include <cstring>
 #include <functional>
+#include <tinyxml2.h>
 #include "Modbus.h"  // Modbus.h 헤더 파일 포함
+
+using namespace tinyxml2;
 
 // 콜백 함수 타입 정의
 typedef std::function<void(const std::string&, const std::vector<uint8_t>&)> ReadCallback;
+
+struct MotorParameter{
+  int id;
+  int homePosition;
+  int plusDir;
+};
 
 void ComPortHandler(const std::string& portName, ReadCallback callback) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
@@ -102,6 +111,50 @@ void ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t
     */
 }
 
+std::vector<MotorParameter> ReadMotorParametersFromXML(const std::string& filename) {
+    std::vector<MotorParameter> parameters;
+    XMLDocument doc;
+    if (doc.LoadFile(filename.c_str()) != XML_SUCCESS) {
+        std::cerr << "Error loading XML file: " << filename << std::endl;
+        return parameters;
+    }
+
+    XMLElement* root = doc.FirstChildElement("Motors");
+    if (!root) {
+        std::cerr << "No <Motors> element found in XML file." << std::endl;
+        return parameters;
+    }
+
+    for (XMLElement* elem = root->FirstChildElement("Motor"); elem != nullptr; elem = elem->NextSiblingElement("Motor")) {
+        MotorParameter param;
+        if (elem->FirstChildElement("ID")->QueryIntText(&param.id) == XML_SUCCESS &&
+            elem->FirstChildElement("HomePosition")->QueryIntText(&param.homePosition) == XML_SUCCESS &&
+            elem->FirstChildElement("OtherParameter")->QueryIntText(&param.plusDir) == XML_SUCCESS) {
+            parameters.push_back(param);
+        } else {
+            std::cerr << "Error reading motor parameter values from XML file." << std::endl;
+        }
+    }
+
+    return parameters;
+}
+
+void InitializeMotor(const MotorParameter& param) {
+    // 모터 초기화 로직 추가
+    std::cout << "Initializing motor ID " << param.id << " to home position " << param.homePosition 
+              << " with other parameter " << param.plusDir << std::endl;
+    
+    // // 실제 모터 초기화 명령을 시리얼 포트로 전송 (예시)
+    // std::vector<uint8_t> message = {static_cast<uint8_t>(param.id), 
+    //                                 static_cast<uint8_t>(param.homePosition & 0xFF), 
+    //                                 static_cast<uint8_t>((param.homePosition >> 8) & 0xFF), 
+    //                                 static_cast<uint8_t>(param.plusDir)};
+    
+    // // 예제 포트로 메시지를 전송
+    // // 실제 포트 이름은 시스템에 따라 다를 수 있습니다
+    // WriteMessage("/dev/ttyUSB0", message);
+}
+
 int main() {
     std::vector<std::thread> threads;
 
@@ -111,6 +164,9 @@ int main() {
     for (const auto& portName : portNames) {
         threads.emplace_back(ComPortHandler, portName, ReadCallbackFunction);
     }
+
+    // Read motor parameters from XML file
+    std::vector<MotorParameter> motorParameters = ReadMotorParametersFromXML("Parameter/parameters.xml");
 
     // Example of writing a 6-byte message to ports (4 bytes data + 2 bytes CRC)
     std::vector<uint8_t> message = {0x01, 0x01, 0xff, 0x05};  // 임의의 데이터
