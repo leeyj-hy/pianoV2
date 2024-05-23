@@ -1,7 +1,8 @@
 # pianoV2
 
-##Installation
 
+Installation
+------------
 
 ``sudo apt-get update``
 
