@@ -1,0 +1,23 @@
+<score-partwise>
+    <head>
+        <tempo></tempo>
+        <time>
+            <beats></beats>
+            <beat-type></beat-type>
+        </time>
+    </head>
+    <part>
+        <BAR barNum = "1">
+            <NOTE noteNum = "1">
+                <note>
+                    <pitch>
+                        <octave> </octave>
+                        <key> </key>
+                    </pitch>
+                    <duration> </duration>
+                    <articulation> </articulation>
+                </note>
+            </NOTE>
+        </BAR>
+    </part>
+</score-partwise>

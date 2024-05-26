@@ -9,6 +9,13 @@
 #include <termios.h>
 #include <cstring>
 #include <functional>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <tinyxml2.h>
 #include "Modbus.h"  // Modbus.h 헤더 파일 포함
 #include "serial.hpp"
@@ -30,15 +37,17 @@ class FingerMotor
 {
 private:
     std::thread comPortThread;
+    std::ofstream logfile;
 
     void ComPortHandler(const std::string& portName, std::function<void(const std::string&, const std::vector<uint8_t>&)> callback);
-    static void ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data);
+    static void ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data, std::ofstream& logfile, bool& prevWasFF);
 
 public:
     int g_deviceQuantity = 0;
     std::string g_acmPort;
     std::vector<MotorParameter> motorParameters;
     std::vector<uint8_t> g_message = {0x00, 0x00, 0x00, 0x00};
+    bool prevWasFF = false;
 
     FingerMotor(const std::string& acmPort, int deviceType, const std::string& _parameterPath);
     ~FingerMotor();
@@ -56,7 +65,7 @@ public:
 };
 
 FingerMotor::FingerMotor(const std::string& acmPort, int deviceType, const std::string& _parameterPath)
-    : g_acmPort(acmPort), paramFilePath(_parameterPath), comPortThread(&FingerMotor::ComPortHandler, this, acmPort, ReadCallbackFunction)
+    : g_acmPort(acmPort), paramFilePath(_parameterPath), comPortThread(&FingerMotor::ComPortHandler, this, acmPort, [this](const std::string& portName, const std::vector<uint8_t>& data) { ReadCallbackFunction(portName, data, logfile, prevWasFF); })
 {
     if (deviceType == L_FINGER) {
         g_deviceQuantity = 14;
@@ -175,7 +184,8 @@ void FingerMotor::InitializeAll() {
     LoadParameter();
 
     for (const auto& _id : motorParameters) {
-        setPosition((uint8_t)_id.id, 0x60, (uint8_t)_id.homePosition);
+        setPosition((uint8_t)_id.id, 0x10, (uint8_t)_id.homePosition);
+        usleep(50000);
     }
 }
 
@@ -243,7 +253,7 @@ void FingerMotor::ComPortHandler(const std::string& portName, std::function<void
         return;
     }
 
-    std::vector<uint8_t> buffer(6);
+    std::vector<uint8_t> buffer(256);
     while (true) {
         int n = read(fd, buffer.data(), buffer.size());
         if (n > 0) {
@@ -255,12 +265,76 @@ void FingerMotor::ComPortHandler(const std::string& portName, std::function<void
     close(fd);
 }
 
-void FingerMotor::ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data) {
-    std::cout << portName << " received: ";
-    for (uint8_t byte : data) {
-        std::cout << "0x" << std::hex << static_cast<int>(byte) << " ";
+void FingerMotor::ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data, std::ofstream& logfile, bool& prevWasFF) {
+    if (!logfile.is_open()) {
+        std::cerr << "Log file is not open!" << std::endl;
+        return;
     }
-    std::cout << std::dec << std::endl;
+
+    for (uint8_t byte : data) {
+        if (byte == 0xff) {
+            if (prevWasFF) {
+                logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
+                logfile << std::endl;
+                prevWasFF = false;
+            } else {
+                prevWasFF = true;
+                logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
+            }
+        } else {
+            prevWasFF = false;
+            logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
+        }
+    }
 }
 
+void FingerMotor::startFeedback(){
+    g_message = {0x00, 0x30, 0x20, 0x20};
+    std::string deviceSuffix;
+    if (FingerMotor::g_deviceType == L_FINGER) {
+        g_message[0] = 0x01;
+        deviceSuffix = "_1";
+    } else if (FingerMotor::g_deviceType == R_FINGER) {
+        g_message[0] = 0x02;
+        deviceSuffix = "_2";
+    } else if (FingerMotor::g_deviceType == HAND) {
+        g_message[0] = 0x03;
+        deviceSuffix = "_3";
+    } else {
+        std::cerr << "No valid Device Type" << std::endl;
+        while (1) {}
+    }
+
+    WriteMessage(g_acmPort, g_message);
+
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&in_time_t), "%Y%m%d_%H%M%S") << deviceSuffix;
+    std::string filename = "../../Log/" + ss.str() + ".txt";
+
+    // Log 디렉토리가 존재하는지 확인하고, 없으면 생성
+    struct stat info;
+    if (stat("../../Log", &info) != 0) {
+        // Log 디렉토리가 존재하지 않음, 생성 시도
+        if (mkdir("../../Log", 0777) == -1) {
+            std::cerr << "Error creating Log directory: " << strerror(errno) << std::endl;
+            return;
+        }
+    } else if (info.st_mode & S_IFDIR) {
+        // Log 디렉토리가 이미 존재
+    } else {
+        std::cerr << "../../Log is not a directory!" << std::endl;
+        return;
+    }
+
+    logfile.open(filename, std::ios::out);
+    if (!logfile.is_open()) {
+        std::cerr << "Error opening log file: " << filename << std::endl;
+        return;
+    }
+
+    std::cout << "Log File " << filename << " created" << endl;
+    std::cout << "Start Logging.." << endl;
+}
 #endif // FINGERMOTOR_H

@@ -123,11 +123,11 @@ int main() {
                         std::cin >> response;
                         if (response == 'u') {
                             _degree += 1;
-                            LfingerObj.setPosition(_idInput, 0xff, _degree);
+                            LfingerObj.setPosition(_idInput, 0x10, _degree);
                             std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
                         } else if (response == 'd') {
                             _degree -= 1;
-                            LfingerObj.setPosition(_idInput, 0xff, _degree);
+                            LfingerObj.setPosition(_idInput, 0x10, _degree);
                             std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
                         } else if (response == 's') {
                             std::cout << "Save Current Position and Leave" << std::endl;
@@ -144,12 +144,12 @@ int main() {
                 }
             } else if (response == 'r') {
                 std::cout << "Right Fingers selected" << std::endl;
-                std::cout << "Select Motor ID num (1~14)" << std::endl;
+                std::cout << "Select Motor ID num (1~15)" << std::endl;
                 int _idInput = 0;
                 std::cin >> _idInput;
                 int _endZero = 0;
                 int _degree = 0;
-                if (_idInput > 0 && _idInput < 14) {
+                if (_idInput > 0 && _idInput < 16) {
                     std::cout << _idInput << " Selected" << std::endl;
                     while (!_endZero) {
                         response = 0;
@@ -162,15 +162,15 @@ int main() {
                         std::cin >> response;
                         if (response == 'u') {
                             _degree += 1;
-                            RfingerObj.setPosition(_idInput, 0xff, _degree);
+                            RfingerObj.setPosition(_idInput, 0x10, _degree);
                             std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
                         } else if (response == 'd') {
                             _degree -= 1;
-                            RfingerObj.setPosition(_idInput, 0xff, _degree);
+                            RfingerObj.setPosition(_idInput, 0x10, _degree);
                             std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
                         } else if (response == 's') {
                             std::cout << "Save Current Position and Leave" << std::endl;
-                            std::string paramFilePath = "../../Parameter/hand1param.xml";
+                            std::string paramFilePath = "../../Parameter/hand2param.xml";
                             RfingerObj.SaveHomePositionToXML(paramFilePath, _idInput, _degree);
                             _endZero = 1;
                         } else if (response == 'l') {
