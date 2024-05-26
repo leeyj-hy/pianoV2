@@ -22,14 +22,21 @@ std::string portLeftFingers = "/dev/ttyACM0";
 std::string portRightFingers = "/dev/ttyACM1";
 std::string portHandFoot = "/dev/ttyACM2";
 
-
+std::string XMLLeftFingers = "../../Parameter/pedalparam.xml";
+std::string XMLFightFingers = "../../Parameter/pedalparam.xml";
+std::string XMLHandFoot = "../../Parameter/pedalparam.xml";
 
 
 int main() {
 
-  FingerMotor LfingerObj(portLeftFingers, L_FINGER);
-  FingerMotor RfingerObj(portRightFingers, R_FINGER);
-  FingerMotor HandFootObj(portHandFoot, HAND);
+  
+
+  FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
+  FingerMotor RfingerObj(portRightFingers, R_FINGER, XMLFightFingers);
+  FingerMotor HandFootObj(portHandFoot, HAND, XMLHandFoot);
+
+
+
 
   char response = 0;
     std::vector<std::thread> threads;
@@ -104,6 +111,8 @@ int main() {
       if(response =='y' | response == 'Y')
       {
         std::cout << "Module 3 init start.."<<std::endl;
+        const auto& portName = portHandFoot;
+        WriteMessage(portName, message);
         usleep(1000000);  //10sec
         response = 0;
         std::cout << "Module 3 init success? [Y/n]"<<std::endl;
@@ -132,12 +141,14 @@ int main() {
       }
 
 
-      const auto& portName = portHandFoot;
-      WriteMessage(portName, message);
+
     }
 
     std::cout << "Module init done!"<<std::endl;
-    
+
+       // MotorParameter로 이루어진 벡터 선언
+
+
     for (auto& t : threads) {
         t.join();
     }

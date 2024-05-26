@@ -1,0 +1,17 @@
+<Motors>
+    <Motor>
+        <ID>1</ID>
+        <HomePosition>0</HomePosition>
+        <plusDir>1</plusDir>
+    </Motor>
+    <Motor>
+        <ID>2</ID>
+        <HomePosition>0</HomePosition>
+        <plusDir>1</plusDir>
+    </Motor>
+    <Motor>
+        <ID>3</ID>
+        <HomePosition>0</HomePosition>
+        <plusDir>1</plusDir>
+    </Motor>
+</Motors>
