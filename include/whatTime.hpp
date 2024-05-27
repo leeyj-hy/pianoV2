@@ -35,27 +35,29 @@ void updateCurrentTime() {
 
 void elapseFromLastCall(){
     timeElapse = current_time_millis - lastUpdate;
-    std::cout << "======== Elapse From Last Call : " << timeElapse << " mS ========" << endl;
+    std::cout << "======== Elapse From Last Call : " << timeElapse << " mS ========" << std::endl;
     lastUpdate.store(current_time_millis);
 }
 
-void elapseFromStart(){
+long long elapseFromStart(){
     if(firstupdate){
        timeElapseFromStart = current_time_millis - firstupdate;
-        std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << endl; 
+        std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl; 
+        return timeElapseFromStart;
     }
     else{
-        std::cout << "======== Timer StartPoint not set ========" << endl;
+        std::cout << "======== Timer StartPoint not set ========" << std::endl;
+        return -1;
     }
 }
 
 void setTimerStartPoint(){
     if(!firstupdate){
             firstupdate.store(current_time_millis);
-            std::cout << "======== Timer Start Point : " << firstupdate << " mS ========" << endl;
+            std::cout << "======== Timer Start Point : " << firstupdate << " mS ========" << std::endl;
         }
     else{
-        std::cout << "======== Timer Has Already Started ========" << endl;
+        std::cout << "======== Timer Has Already Started ========" << std::endl;
     }
 }
 

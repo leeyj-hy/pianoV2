@@ -22,7 +22,30 @@ namespace SCORE{
         return retVal;
     }
 
-    
+    void calKey(){
+
+    }
+
+    void pressKey(FingerMotor &motor, uint8_t key, uint8_t rpm){
+        if(key>motor.g_deviceQuantity || key<0){
+            std::cerr << "Invalid Key" << std::endl;
+            return;
+        }
+        
+        uint8_t goalPosition = 0;
+        motor.setPosition(key, rpm, goalPosition);
+    }
+
+    void releaseKey(FingerMotor &motor, uint8_t key, uint8_t rpm){
+        if(key>motor.g_deviceQuantity || key<0){
+            std::cerr << "Invalid Key" << std::endl;
+            return;
+        }
+        MotorParameter param = motor.ReadMotorParameterByID(motor.paramFilePath, key);
+        uint8_t goalPosition = param.homePosition;
+
+        motor.setPosition(key, rpm, goalPosition);
+    }
 
 
 

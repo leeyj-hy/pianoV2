@@ -270,22 +270,21 @@ void FingerMotor::ReadCallbackFunction(const std::string& portName, const std::v
         std::cerr << "Log file is not open!" << std::endl;
         return;
     }
-
     for (uint8_t byte : data) {
         if (byte == 0xff) {
             if (prevWasFF) {
-                logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
-                logfile << std::endl;
+                logfile << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << std::endl;
                 prevWasFF = false;
             } else {
                 prevWasFF = true;
-                logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
+                logfile << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
             }
         } else {
             prevWasFF = false;
-            logfile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
+                logfile << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " ";
         }
     }
+    
 }
 
 void FingerMotor::startFeedback(){
