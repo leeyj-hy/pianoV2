@@ -15,7 +15,7 @@ atomic<long long> timeElapse = 0;
 // 전역 변수로 현재 시간을 저장할 변수 선언
 std::atomic<long long> current_time_millis(0);
 
-// 현재 시간을 밀리초 단위로 가져와 변수에 저장하는 함수
+/// @brief 현재 시간을 밀리초 단위로 가져와 변수에 저장하는 함수
 void updateCurrentTime() {
     while (true) {
         // 현재 시간을 얻기 위한 시스템 클락 사용
@@ -33,12 +33,15 @@ void updateCurrentTime() {
     }
 }
 
+/// @brief 마지막 호출로부터 경과한 시간을 계산하는 함수
 void elapseFromLastCall(){
     timeElapse = current_time_millis - lastUpdate;
     std::cout << "======== Elapse From Last Call : " << timeElapse << " mS ========" << std::endl;
     lastUpdate.store(current_time_millis);
 }
 
+/// @brief 시작점으로부터 경과한 시간을 계산하는 함수
+/// @return long long 현재시간 - 시작시간
 long long elapseFromStart(){
     if(firstupdate){
        timeElapseFromStart = current_time_millis - firstupdate;
@@ -51,6 +54,7 @@ long long elapseFromStart(){
     }
 }
 
+/// @brief 타이머 시작점을 설정하는 함수
 void setTimerStartPoint(){
     if(!firstupdate){
             firstupdate.store(current_time_millis);

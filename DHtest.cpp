@@ -15,6 +15,8 @@
 #include "whatTime.hpp"
 #include "playThatSheet.hpp"
 
+#define DEFAULTRPM 30
+
 
 int _isM12Init = 0;
 int _isM3Init = 0;
@@ -118,13 +120,13 @@ int main() {
         if (response == 'y' || response == 'Y') {
             std::cout << "Test Start!" << std::endl;
 
-            for(int i=1; i<LfingerObj.g_deviceQuantity; i++){
-                SCORE::pressKey(LfingerObj, i, 50);
+            for(int i=1; i<LfingerObj.g_deviceQuantity+1; i++){
+                SCORE::pressKey(LfingerObj, i, DEFAULTRPM);
                 usleep(1000000);
             }
             usleep(3000000);
-            for(int i=1; i<LfingerObj.g_deviceQuantity; i++){
-                SCORE::releaseKey(LfingerObj, i, 50);
+            for(int i=1; i<LfingerObj.g_deviceQuantity+1; i++){
+                SCORE::releaseKey(LfingerObj, i, DEFAULTRPM);
                 usleep(1000000);
             }
 

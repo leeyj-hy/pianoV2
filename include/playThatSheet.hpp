@@ -25,7 +25,10 @@ namespace SCORE{
     void calKey(){
 
     }
-
+    /// @brief 키 번호와 rpm을 입력받아 해당 모터를 작동시키는 키 누르기 함수
+    /// @param motor 
+    /// @param key 
+    /// @param rpm 
     void pressKey(FingerMotor &motor, uint8_t key, uint8_t rpm){
         if(key>motor.g_deviceQuantity || key<0){
             std::cerr << "Invalid Key" << std::endl;
@@ -36,6 +39,10 @@ namespace SCORE{
         motor.setPosition(key, rpm, goalPosition);
     }
 
+    /// @brief 키 번호와 rpm을 입력받아 해당 모터를 작동시키는 키 떼기 함수
+    /// @param motor 
+    /// @param key 
+    /// @param rpm 
     void releaseKey(FingerMotor &motor, uint8_t key, uint8_t rpm){
         if(key>motor.g_deviceQuantity || key<0){
             std::cerr << "Invalid Key" << std::endl;

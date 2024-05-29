@@ -28,7 +28,9 @@ struct _packet{
 // 콜백 함수 타입 정의
 typedef std::function<void(const std::string&, const std::vector<uint8_t>&)> ReadCallback;
 
-
+/// @brief 시리얼 포트를 열고 설정을 초기화하는 함수
+/// @param portName 
+/// @param message 
 void WriteMessage(const std::string& portName, std::vector<uint8_t> message) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
