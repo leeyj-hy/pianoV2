@@ -64,6 +64,10 @@ public:
     void startFeedback();
 };
 
+/// @brief 생성자
+/// @param acmPort 
+/// @param deviceType 
+/// @param _parameterPath 
 FingerMotor::FingerMotor(const std::string& acmPort, int deviceType, const std::string& _parameterPath)
     : g_acmPort(acmPort), paramFilePath(_parameterPath), comPortThread(&FingerMotor::ComPortHandler, this, acmPort, [this](const std::string& portName, const std::vector<uint8_t>& data) { ReadCallbackFunction(portName, data, logfile, prevWasFF); })
 {
@@ -89,6 +93,7 @@ FingerMotor::FingerMotor(const std::string& acmPort, int deviceType, const std::
     }
 }
 
+/// @brief 소멸자
 FingerMotor::~FingerMotor()
 {
     if (comPortThread.joinable()) {
@@ -96,9 +101,9 @@ FingerMotor::~FingerMotor()
     }
 }
 /// @brief XML 파일에서 motorID에 해당하는 모터의 파라미터를 읽어 반환하는 함수
-/// @param filename 
-/// @param motorID 
-/// @return MotorParameter
+/// @param filename : XML 파일 경로
+/// @param motorID : 읽어올 모터의 ID
+/// @return MotorParameter : 읽어온 모터의 파라미터
 MotorParameter FingerMotor::ReadMotorParameterByID(const std::string& filename, int motorID) {
     MotorParameter param = {-1, -1, -1}; // 초기화 값, 해당 ID가 없으면 반환됨
     XMLDocument doc;
@@ -152,9 +157,9 @@ void FingerMotor::LoadParameter(){
 }
 
 /// @brief 모터의 현재 포지션을 XML파일에 저장하는 함수
-/// @param filename 
-/// @param motorID 
-/// @param homePosition 
+/// @param filename : XML 파일 경로
+/// @param motorID : 저장할 모터의 ID
+/// @param homePosition : 저장할 홈 포지션
 void FingerMotor::SaveHomePositionToXML(const std::string& filename, int motorID, int homePosition) {
     XMLDocument doc;
     if (doc.LoadFile(filename.c_str()) != XML_SUCCESS) {
@@ -199,9 +204,9 @@ void FingerMotor::InitializeAll() {
 }
 
 /// @brief 모터의 목표 위치와 RPM을 입력받아 시리얼로 전송하는 함수
-/// @param m_ID 
-/// @param m_RPM 
-/// @param m_GoalPosDegree 
+/// @param m_ID : 모터 ID
+/// @param m_RPM : 모터 RPM
+/// @param m_GoalPosDegree : 모터 목표 위치
 void FingerMotor::setPosition(uint8_t m_ID, uint8_t m_RPM, uint8_t m_GoalPosDegree) {
     // 모터 위치 설정 로직 추가
     g_message = {0x00, m_ID, m_RPM, m_GoalPosDegree};
@@ -230,8 +235,8 @@ void FingerMotor::setPosition(uint8_t m_ID, uint8_t m_RPM, uint8_t m_GoalPosDegr
 }
 
 /// @brief com port 생성함수
-/// @param portName 
-/// @param callback 
+/// @param portName : 포트 이름
+/// @param callback : 콜백함수
 void FingerMotor::ComPortHandler(const std::string& portName, std::function<void(const std::string&, const std::vector<uint8_t>&)> callback) {
     int fd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
@@ -282,10 +287,10 @@ void FingerMotor::ComPortHandler(const std::string& portName, std::function<void
 }
 
 /// @brief 시리얼 포트로부터 데이터를 읽어 콜백 함수를 호출하는 함수
-/// @param portName 
-/// @param data 
-/// @param logfile 
-/// @param prevWasFF 
+/// @param portName : 포트 이름
+/// @param data : 읽은 데이터
+/// @param logfile : 로그 파일
+/// @param prevWasFF : 이전 바이트가 0xff였는지 여부
 void FingerMotor::ReadCallbackFunction(const std::string& portName, const std::vector<uint8_t>& data, std::ofstream& logfile, bool& prevWasFF) {
     if (!logfile.is_open()) {
         std::cerr << "Log file is not open!" << std::endl;
