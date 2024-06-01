@@ -129,10 +129,6 @@ int main() {
                 SCORE::releaseKey(LfingerObj, i, DEFAULTRPM);
                 usleep(1000000);
             }
-
-            
-
-
             break;
         } else if (response == 'n' || response == 'N') {
             std::cout << "Test exit!" << std::endl;

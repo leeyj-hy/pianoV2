@@ -68,7 +68,7 @@ int main() {
             std::cout << "No valid input! please retry!" << std::endl;
         }
     }
-
+    HandFootObj.LoadParameter();
     elapseFromLastCall();
     elapseFromStart();
 
@@ -90,6 +90,8 @@ int main() {
             std::cin >> response;
 
             if (response == 'y' || response == 'Y') {
+                HandFootObj.setPosition(HandFootObj.motorParameters[0].id, 0x5, HandFootObj.motorParameters[0].homePosition);
+                HandFootObj.setPosition(HandFootObj.motorParameters[1].id, 0x5, HandFootObj.motorParameters[1].homePosition);
                 _isM3Init = 1;
                 break;
             } else if (response == 'n' || response == 'N') {
@@ -110,6 +112,7 @@ int main() {
     LfingerObj.startFeedback();
     RfingerObj.startFeedback();
     HandFootObj.startFeedback();
+    
     while(1){}
     
 

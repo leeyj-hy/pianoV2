@@ -56,6 +56,11 @@ namespace SCORE{
 
 
 
+    /// @brief db 테스트 함수
+    void dbTest(FingerMotor &motor){
+        std::cout << "dB Test start" << std::endl;
+    }
+
 }
 
 

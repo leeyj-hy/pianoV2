@@ -1,12 +1,12 @@
 <Motors>
     <Motor>
         <ID>1</ID>
-        <HomePosition>0</HomePosition>
+        <HomePosition>-30</HomePosition>
         <plusDir>1</plusDir>
     </Motor>
     <Motor>
         <ID>2</ID>
-        <HomePosition>0</HomePosition>
+        <HomePosition>-30</HomePosition>
         <plusDir>1</plusDir>
     </Motor>
     <Motor>

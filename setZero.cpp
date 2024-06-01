@@ -53,6 +53,7 @@ int main() {
             std::cout << "No valid input! please retry!" << std::endl;
         }
     }
+    HandFootObj.LoadParameter();
 
     while (!_isM3Init) {
         std::vector<uint8_t> message = {0x03, 0x30, 0x10, 0x10};
@@ -72,6 +73,8 @@ int main() {
             std::cin >> response;
 
             if (response == 'y' || response == 'Y') {
+                //HandFootObj.setPosition(HandFootObj.motorParameters[0].id, 0x5, HandFootObj.motorParameters[0].homePosition);
+                //HandFootObj.setPosition(HandFootObj.motorParameters[1].id, 0x5, HandFootObj.motorParameters[1].homePosition);
                 _isM3Init = 1;
                 break;
             } else if (response == 'n' || response == 'N') {
@@ -181,11 +184,49 @@ int main() {
                         }
                     }
                 }
-            } else if (response == 'h') {
+            } else if (response == 'p') {
                 std::cout << "Pedal & Hand selected" << std::endl;
                 std::cout << "Select Motor ID num (1~3)" << std::endl;
+                int _idInput=0;
+                std::cin >> _idInput;
+                int _endZero = 0;
+                int _degree = 0;
+                if (_idInput > 0 && _idInput < 4) {
+                    std::cout << _idInput << " Selected" << std::endl;
+                }
+                while (!_endZero){
+                    response = 0;
+                    std::cout << "command input" << std::endl;
+                    std::cout << "finger up(+1 degree) : u" << std::endl;
+                    std::cout << "finger dn(-1 degree) : d" << std::endl;
+                    std::cout << "Save Pos and Leave : s" << std::endl;
+                    std::cout << "Leave without Save : l" << std::endl;
+
+                    std::cin >> response;
+                    if (response == 'u') {
+                        _degree += 1;
+                        HandFootObj.setPosition(_idInput, 0x5, _degree);
+                        std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
+                    } else if (response == 'd') {
+                        _degree -= 1;
+                        HandFootObj.setPosition(_idInput, 0x5, _degree);
+                        std::cout << "Current Position of " << _idInput << ": " << _degree << std::endl;
+                    } else if (response == 's') {
+                        std::cout << "Save Current Position and Leave" << std::endl;
+                        std::string paramFilePath = "../../Parameter/pedalparam.xml";
+                        HandFootObj.SaveHomePositionToXML(paramFilePath, _idInput, _degree);
+                        _endZero = 1;
+                    } else if (response == 'l') {
+                        std::cout << "Leave without Save" << std::endl;
+                        _endZero = 1;
+                    } else {
+                        std::cout << "No valid input! please retry!" << std::endl;
+                    }
+                }
+                
             } else if (response == 'n') {
                 _isM12PosSaved = 1;
+                std::cout << "Exit" << std::endl;
             } else {
                 std::cout << "No valid input! please retry!" << std::endl;
             }
@@ -194,12 +235,20 @@ int main() {
         std::cout << "No valid input! please retry!" << std::endl;
         while (1) {}
     }
+    for(auto& parameters : LfingerObj.motorParameters){
+        std::cout << "ID : " << parameters.id << " HomePosition : " << parameters.homePosition << std::endl;
+    }
+    for(auto& parameters : RfingerObj.motorParameters){
+        std::cout << "ID : " << parameters.id << " HomePosition : " << parameters.homePosition << std::endl;
+    }
+    for(auto& parameters : HandFootObj.motorParameters){
+        std::cout << "ID : " << parameters.id << " HomePosition : " << parameters.homePosition << std::endl;
+    }
 
     for (auto& t : threads) {
         t.join();
     }
 
-    while (1) {}
 
     return 0;
 }

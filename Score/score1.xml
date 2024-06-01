@@ -5,6 +5,7 @@
             <beats></beats>
             <beat-type></beat-type>
         </time>
+        <defaultRpm></defaultRpm>
     </head>
     <part>
         <BAR barNum = "1">
