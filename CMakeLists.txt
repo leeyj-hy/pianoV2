@@ -19,9 +19,9 @@ add_subdirectory(tinyxml2)
 find_package(Threads REQUIRED)
 
 # main.cpp 및 another.cpp를 실행파일로 추가
-add_executable(setZero_exe setZero.cpp)
-add_executable(playScore_exe playScore.cpp)
-add_executable(DHtest_exe DHtest.cpp)
+add_executable(setZero_exe src/setZero.cpp)
+add_executable(playScore_exe src/playScore.cpp)
+add_executable(DHtest_exe src/DHtest.cpp)
 
 # include 디렉토리 설정
 target_include_directories(setZero_exe PRIVATE ${LIBSERIALPORT_INCLUDE_DIRS} include tinyxml2)
