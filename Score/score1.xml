@@ -12,11 +12,31 @@
             <NOTE noteNum = "1">
                 <note>
                     <pitch>
-                        <octave> </octave>
-                        <key> </key>
+                        <octave>4</octave>
+                        <key>E</key>
                     </pitch>
-                    <duration> </duration>
-                    <articulation> </articulation>
+                    <duration>1</duration>
+                    <articulation>0</articulation>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <pitch>
+                        <octave>4</octave>
+                        <key>D</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation>0</articulation>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <pitch>
+                        <octave>4</octave>
+                        <key>C</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation>0</articulation>
                 </note>
             </NOTE>
         </BAR>

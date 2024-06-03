@@ -30,7 +30,19 @@ std::string XMLHandFoot = "../../Parameter/pedalparam.xml";
 
 std::string XMLScore = "../../Score/score1.xml";
 
+
+
 int main() {
+    
+    std::vector<SCORE::NOTE> notes;
+
+
+    std::cout << "score loading failure! " << SCORE::loadScoreFromXML(XMLScore, notes) <<  std::endl;
+
+    std::cout << "score loading success!" << std::endl;
+    for(auto& note : notes){
+        std::cout << "Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key <<  std::endl;
+    }
 
     std::thread timeUpdater(updateCurrentTime);
 
@@ -38,7 +50,7 @@ int main() {
     FingerMotor RfingerObj(portRightFingers, R_FINGER, XMLRightFingers);
     FingerMotor HandFootObj(portHandFoot, HAND, XMLHandFoot);
 
-
+    
     char response = 0;
     std::vector<std::thread> threads;
 
@@ -112,6 +124,8 @@ int main() {
     LfingerObj.startFeedback();
     RfingerObj.startFeedback();
     HandFootObj.startFeedback();
+
+
     
     while(1){}
     
