@@ -11,6 +11,12 @@
 #include <functional>
 #include <tinyxml2.h>
 
+#define linearTimeConst 850    //how many ms to move 1 white key
+#define defaultLinearVel 0xff   //default velocity
+
+#define posPress 10
+#define posRelease -30
+
 namespace SCORE {
 
     using namespace tinyxml2;
@@ -119,7 +125,7 @@ namespace SCORE {
             return;
         }
 
-        uint8_t goalPosition = 0;
+        uint8_t goalPosition = posPress;
         motor.setPosition(key, rpm, goalPosition);
     }
 
@@ -138,22 +144,88 @@ namespace SCORE {
         motor.setPosition(key, rpm, goalPosition);
     }
 
-    void moveToOctave(FingerMotor &motor, uint8_t octave, uint8_t rpm, uint8_t ID) {
-        if (octave > motor.g_deviceQuantity || octave < 0) {
-            std::cerr << "Invalid Octave" << std::endl;
-            return;
+    /// @brief 옥타브와 rpm을 입력받아 해당 모터를 옥타브로 이동시키는 함수
+    /// @param motor 
+    /// @param octave 
+    /// @param rpm 
+    /// @param ID 
+    /// @return 움직이는 간격 계산결과값 반환(칸수)
+    int moveToOctave(FingerMotor &motor, uint8_t octave, uint8_t rpm, uint8_t ID) {
+        int goalPosition = 0;
+        int retVal = 0;
+        if(ID == 1){
+            std::cout << "Left Hand ";
         }
-
-        motor.motorParameters[ID];
-
-        //motor.setPosition(octave, 50, goalPosition);
+        else if(ID == 2){
+            std::cout << "Right Hand ";
+        }
+        else{
+            std::cerr << "Invalid ID" << std::endl;
+            return retVal;
+        }
+        
+        if(octave == 0 && ID == 1){
+            std::cout << "Move to 0 Octave" << std::endl;
+            motor.setPosition(ID, rpm, goalPosition);
+            retVal = currentPosL;  //how many steps moved
+            currentPosL = 0;
+            return retVal;
+        }
+        else if(octave >0 && octave < 7){
+            std::cout << "Move to " << octave << " Octave" << std::endl;
+            if(ID == 1){    //case left hand
+                goalPosition = 2 + (octave-1)*7;
+                if(goalPosition + 7 > currentPosR){
+                    std::cerr << "Invalid Position Left" << std::endl;
+                    return retVal;//case push
+                }
+                motor.setPosition(ID, rpm, goalPosition);
+                retVal = abs(currentPosL-goalPosition);  //how many steps moved
+                currentPosL = goalPosition;
+                return retVal;
+            }
+            else if (ID == 2){  //case right hand
+                goalPosition = (7 - octave)*7;
+                if(goalPosition - 14 < currentPosL){
+                    std::cerr << "Invalid Position Right" << std::endl;
+                    return retVal;//case push
+                }
+                motor.setPosition(ID, rpm, goalPosition);
+                retVal = abs(currentPosR-51+goalPosition);  //how many steps moved
+                currentPosR = 51 - goalPosition;
+                return retVal;
+            }
+            else{
+                std::cerr << "Invalid ID" << std::endl;
+                return retVal;
+            }
+        }
+        else if(octave == 7 && ID == 2){
+            std::cout << "Move to 7 Octave" << std::endl;
+            motor.setPosition(ID, rpm, goalPosition);
+            retVal = 51 - currentPosR;  //how many steps moved
+            currentPosL = 0;
+            return retVal;
+        }
+        else{
+            std::cerr << "Invalid Octave" << std::endl;
+            return retVal;
+        }
     }
 
     /// @brief db 테스트 함수
+    /// @param motor
     void dbTest(FingerMotor &motor) {
         std::cout << "dB Test start" << std::endl;
         usleep(1000000);
-        motor.setPosition(1, 0x30, )
+        std::cout << "move to 4th octave" << std::endl;
+        int time4sleep = moveToOctave(motor, 4, defaultLinearVel, 1);   //move left hand to 4th octave
+        usleep(time4sleep*linearTimeConst);
+        std::cout << "ready for octave test" << std::endl;
+    }
+
+    void handPressKey(FingerMotor &motor, uint8_t key, uint8_t rpm) {
+        pressKey(motor, key, rpm);
     }
 
 }

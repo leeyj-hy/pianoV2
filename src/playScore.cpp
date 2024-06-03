@@ -125,7 +125,21 @@ int main() {
     RfingerObj.startFeedback();
     HandFootObj.startFeedback();
 
+    response = 0;
+    std::cout << "Start dB Test? [Y/n]" << std::endl;
+    std::cin >> response;
 
+    if(response == 'y' || response == 'Y'){
+        SCORE::dbTest(HandFootObj);
+        int _isdBTestDone = 0;
+        while(!_isdBTestDone){
+            
+        }
+
+    }
+    else{
+        std::cout << "dB Test skipped" << std::endl;
+    }
     
     while(1){}
     
