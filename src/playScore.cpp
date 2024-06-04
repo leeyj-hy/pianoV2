@@ -41,9 +41,9 @@ int main() {
 
     std::cout << "score loading success!" << std::endl;
     for(auto& note : notes){
-        std::cout << "Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key <<  std::endl;
+        std::cout <<"ID : " << note.ID <<  " Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key <<  std::endl;
     }
-
+    while(1){}
     std::thread timeUpdater(updateCurrentTime);
 
     FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
@@ -134,15 +134,26 @@ int main() {
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
             
+            _isdBTestDone=1;
         }
-
     }
     else{
         std::cout << "dB Test skipped" << std::endl;
     }
     
-    while(1){}
-    
+    response = 0;
+    std::cout << "Start Playing?" << std::endl;
+    std::cin >> response;
+
+    if(response == 'y' || response == 'Y'){
+        std::cout << "Start Playing!" << std::endl;
+        for(auto& note : notes){
+            
+        }
+    }
+    else{
+        std::cout << "Playing skipped" << std::endl;
+    }
 
     for (auto& t : threads) {
         t.join();
