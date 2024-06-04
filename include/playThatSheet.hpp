@@ -22,6 +22,10 @@ namespace SCORE {
     using namespace tinyxml2;
     using namespace std;
 
+    int Tempo = 0;
+    int Beats = 0;
+    int BeatType = 0;
+
     struct NOTE {
         int barNum;
         int noteNum;
@@ -61,12 +65,17 @@ namespace SCORE {
         XMLElement* head = scorePartwise->FirstChildElement("head");
         if (head) {
             XMLElement* tempo = head->FirstChildElement("tempo");
+            Tempo = tempo->IntText();
             XMLElement* time = head->FirstChildElement("time");
             if (time) {
                 XMLElement* beats = time->FirstChildElement("beats");
+                Beats = beats->IntText();
                 XMLElement* beatType = time->FirstChildElement("beat-type");
+                BeatType = beatType->IntText();
             }
             XMLElement* defaultRpm = head->FirstChildElement("defaultRpm");
+            
+            
         }
         std::cout << "reading head done" << std::endl;
         // Read <part> element
@@ -232,11 +241,14 @@ namespace SCORE {
 
     /// @brief 기준음이 주어졌을 때 해당 음을 누르는 함수
     /// @param motor : 디바이스 객체
+    /// @param ID : 손의 ID
     /// @param currentPos : 현재 손 위치
     /// @param noteH : 누를 음의 높이
     /// @param rpm : 회전 속도
-    void pressNote(FingerMotor &motor, int currentPos, int noteH, uint8_t rpm) {
-        
+    void pressNote(FingerMotor &motor, int ID, int currentPos, int noteH, uint8_t rpm) {
+        if(ID == 1){
+
+        }
     }
 
 
@@ -247,8 +259,8 @@ namespace SCORE {
     int fullToWhiteKey(int fullKey, int direction) {
     // 각 키의 백건 여부 판별
     static const bool isWhiteKey[] = {
-        true, false, true, false, true,  // C, C#, D, D#, E
-        true, false, true, false, true, false, true,  // F, F#, G, G#, A, A#, B
+        true, false, true, true, false, true, false, true,  // A, A#, B, C, C#, D, D#, E
+        true, false, true, false,  // F, F#, G, G#
     };
 
     // 백건 카운트
@@ -261,20 +273,21 @@ namespace SCORE {
 
     // 현재 키가 백건이면 바로 반환
     if (isWhiteKey[fullKey % 12]) return whiteCount;
-
+    
+    std::cout << "black key";
     // 흑건인 경우 direction에 따라 처리
-    if (direction == 1) {  // 낮은음의 백건
+    if (direction == 2) {  // 낮은음의 백건
         // 흑건 전에 나오는 마지막 백건을 찾기
         for (int i = fullKey; i >= 0; i--) {
             if (isWhiteKey[i % 12]) {
-                return fullToWhiteKey(i);
+                return fullToWhiteKey(i, 1);
             }
         }
-    } else if (direction == 2) {  // 높은음의 백건
+    } else if (direction == 1) {  // 높은음의 백건
         // 흑건 후에 나오는 첫 번째 백건을 찾기
         for (int i = fullKey; i < 88; i++) {
             if (isWhiteKey[i % 12]) {
-                return fullToWhiteKey(i);
+                return fullToWhiteKey(i, 1);
             }
         }
     }

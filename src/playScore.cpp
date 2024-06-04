@@ -40,10 +40,17 @@ int main() {
     std::cout << "score loading failure! " << SCORE::loadScoreFromXML(XMLScore, notes) <<  std::endl;
 
     std::cout << "score loading success!" << std::endl;
+    std::cout << "tempo : " << SCORE::Tempo << " time signature : " << SCORE::Beats << "/" << SCORE::BeatType << std::endl;
     for(auto& note : notes){
-        std::cout <<"ID : " << note.ID <<  " Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key <<  std::endl;
+        note.octave = SCORE::fullToWhiteKey(note.key, note.ID);
+        std::cout <<"ID : " << note.ID <<  " Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key  << " duration : " << note.duration<< " octave : " << note.octave <<  std::endl;
+
     }
     while(1){}
+
+
+
+    
     std::thread timeUpdater(updateCurrentTime);
 
     FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
