@@ -151,8 +151,8 @@ namespace SCORE {
             std::cerr << "Invalid Key" << std::endl;
             return;
         }
-        MotorParameter param = motor.ReadMotorParameterByID(motor.paramFilePath, key);
-        uint8_t goalPosition = param.homePosition;
+        //MotorParameter param = motor.ReadMotorParameterByID(motor.paramFilePath, key);
+        uint8_t goalPosition = motor.motorParameters[key].homePosition;
 
         motor.setPosition(key, rpm, goalPosition);
     }
@@ -256,44 +256,48 @@ namespace SCORE {
     /// @param fullKey 
     /// @param direction 
     /// @return 
-    int fullToWhiteKey(int fullKey, int direction) {
+   int fullToWhiteKey(int fullKey, int direction) {
     // 각 키의 백건 여부 판별
-    static const bool isWhiteKey[] = {
-        true, false, true, true, false, true, false, true,  // A, A#, B, C, C#, D, D#, E
-        true, false, true, false,  // F, F#, G, G#
-    };
+        static const bool isWhiteKey[] = {
+            true, false, true, true, false, true, false, true,  //  A, A#, B, C, C#, D, D#, E
+            true, false, true, false,   // F, F#, G, G#
+        };
+        if(fullKey == 0){
+            return -1;
+        }
+        // 1-based fullKey를 0-based 인덱스로 변환
+        fullKey -= 1;
 
-    // 백건 카운트
-    int whiteCount = 0;
+        // 백건 카운트
+        int whiteCount = 0;
 
-    // 전체 키를 순회하면서 백건 카운트
-    for (int i = 0; i < fullKey; i++) {
-        if (isWhiteKey[i % 12]) whiteCount++;
-    }
+        // 전체 키를 순회하면서 백건 카운트
+        for (int i = 0; i <= fullKey; i++) {
+            if (isWhiteKey[i % 12]) whiteCount++;
+        }
 
-    // 현재 키가 백건이면 바로 반환
-    if (isWhiteKey[fullKey % 12]) return whiteCount;
-    
-    std::cout << "black key";
-    // 흑건인 경우 direction에 따라 처리
-    if (direction == 2) {  // 낮은음의 백건
-        // 흑건 전에 나오는 마지막 백건을 찾기
-        for (int i = fullKey; i >= 0; i--) {
-            if (isWhiteKey[i % 12]) {
-                return fullToWhiteKey(i, 1);
+        // 현재 키가 백건이면 바로 반환
+        if (isWhiteKey[fullKey % 12]) return whiteCount - 1;
+        std::cout << "black ";
+        // 흑건인 경우 direction에 따라 처리
+        if (direction == 2) {  // 낮은음의 백건
+            // 흑건 전에 나오는 마지막 백건을 찾기
+            for (int i = fullKey - 1; i >= 0; i--) {
+                if (isWhiteKey[i % 12]) {
+                    return fullToWhiteKey(i + 1, direction);
+                }
+            }
+        } else if (direction == 1) {  // 높은음의 백건
+            // 흑건 후에 나오는 첫 번째 백건을 찾기
+            for (int i = fullKey + 1; i < 88; i++) {
+                if (isWhiteKey[i % 12]) {
+                    return fullToWhiteKey(i + 1, direction);
+                }
             }
         }
-    } else if (direction == 1) {  // 높은음의 백건
-        // 흑건 후에 나오는 첫 번째 백건을 찾기
-        for (int i = fullKey; i < 88; i++) {
-            if (isWhiteKey[i % 12]) {
-                return fullToWhiteKey(i, 1);
-            }
-        }
-    }
 
-    // 적절한 백건을 찾지 못한 경우 (오류 방지)
-    return -1;
+        // 적절한 백건을 찾지 못한 경우 (오류 방지)
+        return -1;
     }
 
 

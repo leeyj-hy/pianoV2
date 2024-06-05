@@ -46,11 +46,10 @@ int main() {
         std::cout <<"ID : " << note.ID <<  " Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key  << " duration : " << note.duration<< " octave : " << note.octave <<  std::endl;
 
     }
-    while(1){}
+
+    // while(1){}
 
 
-
-    
     std::thread timeUpdater(updateCurrentTime);
 
     FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
@@ -140,20 +139,28 @@ int main() {
         SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
-            
+            SCORE::pressKey(LfingerObj, 11, 0x30);
+            usleep(1000000);
+            SCORE::releaseKey(LfingerObj, 11, 0x30);
+            usleep(1000000);
             _isdBTestDone=1;
         }
     }
     else{
         std::cout << "dB Test skipped" << std::endl;
     }
-    
+    std::cout << "dB Test done!" << std::endl;
+    usleep(1000000);
+    usleep(SCORE::moveToOctave(HandFootObj, 0, defaultLinearVel, 1) * linearTimeConst*1000);
+
     response = 0;
     std::cout << "Start Playing?" << std::endl;
     std::cin >> response;
 
     if(response == 'y' || response == 'Y'){
         std::cout << "Start Playing!" << std::endl;
+        int lStart = 0;
+        int rStart = 0;
         for(auto& note : notes){
             
         }
