@@ -36,25 +36,23 @@ int main() {
     
     std::vector<SCORE::NOTE> notes;
 
+    std::cout << SCORE::loadScoreFromXML(XMLScore, notes) <<  std::endl;
 
-    std::cout << "score loading failure! " << SCORE::loadScoreFromXML(XMLScore, notes) <<  std::endl;
-
-    std::cout << "score loading success!" << std::endl;
-    std::cout << "tempo : " << SCORE::Tempo << " time signature : " << SCORE::Beats << "/" << SCORE::BeatType << std::endl;
-    for(auto& note : notes){
-        note.octave = SCORE::fullToWhiteKey(note.key, note.ID);
-        std::cout <<"ID : " << note.ID <<  " Bar : " << note.barNum << " Note : " << note.noteNum << " key : " << note.key  << " duration : " << note.duration<< " octave : " << note.octave <<  std::endl;
-
-    }
-
-    // while(1){}
-
+    
 
     std::thread timeUpdater(updateCurrentTime);
 
     FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
     FingerMotor RfingerObj(portRightFingers, R_FINGER, XMLRightFingers);
     FingerMotor HandFootObj(portHandFoot, HAND, XMLHandFoot);
+    usleep(1000000);
+    std::cout << "score loading success!" << std::endl;
+    std::cout << "tempo : " << SCORE::Tempo << " time signature : " << SCORE::Beats << "/" << SCORE::BeatType << std::endl;
+    
+    // SCORE::calKey(notes, HandFootObj);
+    
+
+    // while(1){}
 
     
     char response = 0;
@@ -62,14 +60,14 @@ int main() {
 
     std::vector<std::string> portNames = {LfingerObj.g_acmPort, RfingerObj.g_acmPort, HandFootObj.g_acmPort};  // ttyACM
 
-    setTimerStartPoint();
+    //setTimerStartPoint();
 
     while (!_isM12Init) {
         LfingerObj.InitializeAll();
         RfingerObj.InitializeAll();
 
-        elapseFromLastCall();
-        elapseFromStart();
+        //elapseFromLastCall();
+        //elapseFromStart();
 
         std::cout << "Module 1, 2 init End" << std::endl;
         std::cout << "Progress to Module 3 Init sequence? [y/n]" << std::endl;
@@ -87,8 +85,8 @@ int main() {
         }
     }
     HandFootObj.LoadParameter();
-    elapseFromLastCall();
-    elapseFromStart();
+    //elapseFromLastCall();
+    //elapseFromStart();
 
     while (!_isM3Init) {
         std::vector<uint8_t> message = {0x03, 0x30, 0x10, 0x10};
@@ -122,8 +120,8 @@ int main() {
         }
     }
 
-    elapseFromLastCall();
-    elapseFromStart();
+    //elapseFromLastCall();
+    //elapseFromStart();
 
     std::cout << "Whole Module init done!" << std::endl;
 
@@ -143,6 +141,8 @@ int main() {
             usleep(1000000);
             SCORE::releaseKey(LfingerObj, 11, 0x30);
             usleep(1000000);
+
+            SCORE::RPM = 0; //dB test 결과값을 여기에 저장
             _isdBTestDone=1;
         }
     }
@@ -151,7 +151,8 @@ int main() {
     }
     std::cout << "dB Test done!" << std::endl;
     usleep(1000000);
-    usleep(SCORE::moveToOctave(HandFootObj, 0, defaultLinearVel, 1) * linearTimeConst*1000);
+    int tSleep = SCORE::moveToOctave(HandFootObj, 0, defaultLinearVel, 1, 1) * linearTimeConst*1000;
+    usleep(tSleep);
 
     response = 0;
     std::cout << "Start Playing?" << std::endl;
@@ -159,11 +160,32 @@ int main() {
 
     if(response == 'y' || response == 'Y'){
         std::cout << "Start Playing!" << std::endl;
-        int lStart = 0;
-        int rStart = 0;
-        for(auto& note : notes){
-            
+        
+        SCORE::calKey(notes, HandFootObj);
+        setTimerStartPoint();
+        size_t quantity = notes.size();
+        int i = 0;
+        while(1){
+            for(size_t j = 0; j<quantity; j++){
+                if(notes[j].SP_module < elapseFromStart() && notes[j].moveOctave){//move octave
+                    SCORE::moveToWhiteKey(HandFootObj, notes[j].octave, defaultLinearVel, notes[j].ID, 1);
+                }
+
+                if(notes[j].SP_finger < elapseFromStart()){ //press key
+                    std::cout << "press key" << std::endl;
+                    //press
+                    //add to pressed list in vector
+                }
+
+                if(notes[j].SP_finger + notes[j].timeHold < elapseFromStart())//check if holdtime of pressed key is over
+                {
+                    std::cout << "release key" << std::endl;
+                    //release
+                    //remove from pressed list in vector
+                }
+            }
         }
+        
     }
     else{
         std::cout << "Playing skipped" << std::endl;
