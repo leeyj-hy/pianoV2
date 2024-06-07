@@ -132,7 +132,7 @@ int main() {
     std::cin >> response;
 
     if(response == 'y' || response == 'Y'){
-        //SCORE::dbTest(HandFootObj);
+        SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
             SCORE::pressKey(LfingerObj, 11, 0x30);
