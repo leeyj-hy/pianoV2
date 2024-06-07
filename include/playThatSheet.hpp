@@ -14,8 +14,8 @@
 #define linearTimeConst 85    //how many ms to move 1 white key
 #define defaultLinearVel 0xff   //default velocity
 
-#define posPress 10
-#define posRelease -30
+#define posPress 5
+#define posRelease -25
 
 namespace SCORE {
 
@@ -49,6 +49,8 @@ namespace SCORE {
         long long RP_finger=0;    //release point of inger
         long long RP_module=0;    //release point of module
         int moveOctave =0;
+        int _isPressed = 0;
+        int _isPlayed = 0;
     };
 
     int currentPosL = 0;
@@ -156,7 +158,7 @@ namespace SCORE {
             return;
         }
         //MotorParameter param = motor.ReadMotorParameterByID(motor.paramFilePath, key);
-        uint8_t goalPosition = motor.motorParameters[key].homePosition;
+        uint8_t goalPosition = posRelease;
 
         motor.setPosition(key, rpm, goalPosition);
     }
@@ -254,15 +256,15 @@ namespace SCORE {
         
         if(ID == 1){
             retVal = abs(currentPosL - whiteKey);  //how many steps moved
-            std::cout << "Move to " << (int)whiteKey << " white key ";
-            if(activeMotor) motor.setPosition(ID, rpm, whiteKey);
+            std::cout << currentPosL << " Move to " << (int)whiteKey << " white key ";
+            if(activeMotor) motor.setPosition(ID, rpm, currentPosL-whiteKey);
             currentPosL = whiteKey;
             return retVal;
         }
         else if(ID == 2){
             retVal = abs(currentPosR - whiteKey);  //how many steps moved
-            std::cout << "Move to " << (int)whiteKey << " white key ";
-            if(activeMotor) motor.setPosition(ID, rpm, whiteKey);
+            std::cout << currentPosR << " Move to " << (int)whiteKey << " white key ";
+            if(activeMotor) motor.setPosition(ID, rpm, currentPosR-whiteKey);
             currentPosR = whiteKey;
             return retVal;
         }

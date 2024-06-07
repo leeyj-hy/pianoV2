@@ -49,10 +49,8 @@ int main() {
     std::cout << "score loading success!" << std::endl;
     std::cout << "tempo : " << SCORE::Tempo << " time signature : " << SCORE::Beats << "/" << SCORE::BeatType << std::endl;
     
-    // SCORE::calKey(notes, HandFootObj);
-    
-
-    // while(1){}
+    SCORE::calKey(notes, HandFootObj);
+    //while(1){}
 
     
     char response = 0;
@@ -134,7 +132,7 @@ int main() {
     std::cin >> response;
 
     if(response == 'y' || response == 'Y'){
-        SCORE::dbTest(HandFootObj);
+        //SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
             SCORE::pressKey(LfingerObj, 11, 0x30);
@@ -145,14 +143,16 @@ int main() {
             SCORE::RPM = 0; //dB test 결과값을 여기에 저장
             _isdBTestDone=1;
         }
+        std::cout << "dB Test done!" << std::endl;
+        usleep(1000000);
+        int tSleep = SCORE::moveToWhiteKey(HandFootObj, 0, defaultLinearVel, 1, 1) * linearTimeConst;
+        std::cout << "Sleep for "<< tSleep << "ms" << std::endl;
+        usleep(tSleep * 1000);
     }
     else{
         std::cout << "dB Test skipped" << std::endl;
     }
-    std::cout << "dB Test done!" << std::endl;
-    usleep(1000000);
-    int tSleep = SCORE::moveToOctave(HandFootObj, 0, defaultLinearVel, 1, 1) * linearTimeConst*1000;
-    usleep(tSleep);
+    
 
     response = 0;
     std::cout << "Start Playing?" << std::endl;
@@ -161,25 +161,40 @@ int main() {
     if(response == 'y' || response == 'Y'){
         std::cout << "Start Playing!" << std::endl;
         
-        SCORE::calKey(notes, HandFootObj);
+        //SCORE::calKey(notes, HandFootObj);
+        SCORE::currentPosL = 0;
+        SCORE::currentPosR = 0;
         setTimerStartPoint();
         size_t quantity = notes.size();
-        int i = 0;
+        int octave_tmp = 0;
         while(1){
             for(size_t j = 0; j<quantity; j++){
                 if(notes[j].SP_module < elapseFromStart() && notes[j].moveOctave){//move octave
-                    SCORE::moveToWhiteKey(HandFootObj, notes[j].octave, defaultLinearVel, notes[j].ID, 1);
+                    std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
+                    std::cout << j << " ";
+                    if(notes[j].ID == 1){
+                        octave_tmp = notes[j].octave - 6;
+                    }
+                    else if(notes[j].ID == 2){
+                        octave_tmp = 51-notes[j].octave - 7;
+                    }
+                    SCORE::moveToWhiteKey(HandFootObj, octave_tmp, defaultLinearVel, notes[j].ID, 1);
+                    notes[j].moveOctave = 0;
+                    std::cout <<"ID : " << notes[j].ID <<  " Bar : " << notes[j].barNum << " Note : " << notes[j].noteNum << " key : " << notes[j].key  << " duration : " << notes[j].duration<< " octave : " << notes[j].octave  << " timeH : " << notes[j].timeHold << " spF : " << notes[j].SP_finger <<  " spM: " << notes[j].SP_module << " mv : "<<notes[j].moveOctave <<  std::endl;
                 }
 
                 if(notes[j].SP_finger < elapseFromStart()){ //press key
-                    std::cout << "press key" << std::endl;
+                    //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
+                    //std::cout << "press key" << std::endl;
                     //press
                     //add to pressed list in vector
+                    
                 }
 
                 if(notes[j].SP_finger + notes[j].timeHold < elapseFromStart())//check if holdtime of pressed key is over
                 {
-                    std::cout << "release key" << std::endl;
+                    //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
+                    //std::cout << "release key" << std::endl;
                     //release
                     //remove from pressed list in vector
                 }

@@ -15,7 +15,7 @@
 #include "whatTime.hpp"
 #include "playThatSheet.hpp"
 
-#define DEFAULTRPM 30
+#define DEFAULTRPM 0xff
 
 
 int _isM12Init = 0;

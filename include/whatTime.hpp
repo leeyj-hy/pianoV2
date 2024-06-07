@@ -45,7 +45,7 @@ void elapseFromLastCall(){
 long long elapseFromStart(){
     if(firstupdate){
        timeElapseFromStart = current_time_millis - firstupdate;
-        std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl; 
+        //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl; 
         return timeElapseFromStart;
     }
     else{
