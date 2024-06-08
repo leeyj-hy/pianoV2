@@ -29,7 +29,7 @@ void updateCurrentTime() {
         current_time_millis.store(millis);
 
         // 1초마다 현재 시간을 갱신
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
 

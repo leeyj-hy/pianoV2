@@ -140,7 +140,7 @@ int main() {
             SCORE::releaseKey(LfingerObj, 11, 0x30);
             usleep(1000000);
 
-            SCORE::RPM = 0; //dB test 결과값을 여기에 저장
+            SCORE::RPM = 50; //dB test 결과값을 여기에 저장
             _isdBTestDone=1;
         }
         std::cout << "dB Test done!" << std::endl;
@@ -183,22 +183,28 @@ int main() {
                     std::cout <<"ID : " << notes[j].ID <<  " Bar : " << notes[j].barNum << " Note : " << notes[j].noteNum << " key : " << notes[j].key  << " duration : " << notes[j].duration<< " octave : " << notes[j].octave  << " timeH : " << notes[j].timeHold << " spF : " << notes[j].SP_finger <<  " spM: " << notes[j].SP_module << " mv : "<<notes[j].moveOctave <<  std::endl;
                 }
 
-                if(notes[j].SP_finger < elapseFromStart()){ //press key
-                    //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
-                    //std::cout << "press key" << std::endl;
+                if(notes[j].SP_finger < elapseFromStart() && notes[j]._isPlayed == 0 && notes[j]._isPressed == 0){ //press key
+                    std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
+                    std::cout << "press " << notes[j].barNum << " " << notes[j].noteNum << " key" << std::endl;
+                    notes[j]._isPressed = 1;
+                    SCORE::pressNote(LfingerObj, RfingerObj, notes[j].ID, notes[j].key);
                     //press
                     //add to pressed list in vector
                     
                 }
 
-                if(notes[j].SP_finger + notes[j].timeHold < elapseFromStart())//check if holdtime of pressed key is over
+                if(notes[j].SP_finger + notes[j].timeHold < elapseFromStart() && notes[j]._isPlayed == 0 && notes[j]._isPressed == 1)//check if holdtime of pressed key is over
                 {
-                    //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
-                    //std::cout << "release key" << std::endl;
+                    std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
+                    std::cout << "release " << notes[j].barNum << " " << notes[j].noteNum << " key" << std::endl;
+                    notes[j]._isPlayed = 1;
+                    notes[j]._isPressed = 0;
+                    SCORE::releaseNote(LfingerObj, RfingerObj, notes[j].ID, notes[j].key);
                     //release
                     //remove from pressed list in vector
                 }
             }
+            //std::cout << "======== Elapse From Start : " << timeElapseFromStart << " mS ========" << std::endl;
         }
         
     }

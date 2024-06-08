@@ -289,22 +289,7 @@ namespace SCORE {
     }
 
 
-    /// @brief 기준음이 주어졌을 때 해당 음을 누르는 함수
-    /// @param motor : 디바이스 객체
-    /// @param ID : 손의 ID
-    /// @param currentPos : 현재 손 위치
-    /// @param noteH : 누를 음의 높이
-    /// @param rpm : 회전 속도
-    void pressNote(FingerMotor &motor, int ID, int currentPos, int noteH, uint8_t rpm) {
-        if(noteH == -1){
-            std::cout << "Rest" << std::endl;
-            return;
-        }
-        
-        if(ID == 1){
-
-        }
-    }
+    
 
 
     /// @brief 88개의 키 중에서 주어진 키가 몇 번째 백건인지 계산하는 함수
@@ -453,6 +438,55 @@ namespace SCORE {
         
             std::cout <<"ID : " << notes[i].ID <<  " Bar : " << notes[i].barNum << " Note : " << notes[i].noteNum << " key : " << notes[i].key  << " duration : " << notes[i].duration<< " octave : " << notes[i].octave  << " timeH : " << notes[i].timeHold << " spF : " << notes[i].SP_finger <<  " spM: " << notes[i].SP_module << " mv : "<<notes[i].moveOctave <<  std::endl;
 
+        }
+    }
+
+
+    /// @brief 기준음이 주어졌을 때 해당 음을 누르는 함수
+    /// @param lfinger : 왼손 모터 객체
+    /// @param rfinger : 오른손 모터 객체
+    /// @param ID : 손의 ID
+    /// @param noteH : 누르는 음의 높이
+    void pressNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH) {
+        if(noteH == 0){
+            std::cout << "Rest" << std::endl;
+            return;
+        }
+        
+        if(ID == 1){
+            std::cout << "lhand curr " << whiteToFullKey(currentPosL) <<" press " << noteH - whiteToFullKey(currentPosL)<< std::endl;
+            releaseKey(lfinger, noteH - whiteToFullKey(currentPosL), RPM);
+        }
+        else if(ID == 2){
+            std::cout << "rhand curr "<< 44-currentPosR <<" press "<< noteH - whiteToFullKey(44-currentPosR) << std::endl;
+            releaseKey(rfinger, noteH - 88+whiteToFullKey(currentPosR+7), RPM);
+        }
+        else{
+            std::cerr << "Invalid ID" << std::endl;
+            return;
+        }
+    }
+
+    /// @brief 기준음이 주어졌을 때 해당 음을 떼는 함수
+    /// @param lfinger : 왼손 디바이스 객체
+    /// @param rfinger : 오른손 디바이스 객체
+    /// @param ID : 손의 ID
+    /// @param noteH : 떼는 음의 높이
+    void releaseNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH) {
+        if(noteH == 0){
+            std::cout << "Rest" << std::endl;
+            return;
+        }
+        
+        if(ID == 1){
+            pressKey(lfinger, noteH - whiteToFullKey(currentPosL), RPM);
+        }
+        else if(ID == 2){
+            pressKey(rfinger, noteH - 88+whiteToFullKey(currentPosR+7), RPM);
+        }
+        else{
+            std::cerr << "Invalid ID" << std::endl;
+            return;
         }
     }
 
