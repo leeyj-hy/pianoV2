@@ -14,6 +14,7 @@
 #include "FingerMotor.hpp"
 #include "whatTime.hpp"
 #include "playThatSheet.hpp"
+#include "dBPort.hpp"
 
 
 int _isM12Init = 0;
@@ -23,6 +24,7 @@ int _isM12PosSaved = 0;
 std::string portLeftFingers = "/dev/ttyACM0";
 std::string portRightFingers = "/dev/ttyACM1";
 std::string portHandFoot = "/dev/ttyACM2";
+std::string portDb = "/dev/ttyACM3";
 
 std::string XMLLeftFingers = "../../Parameter/hand1param.xml";
 std::string XMLRightFingers = "../../Parameter/hand2param.xml";
@@ -45,6 +47,10 @@ int main() {
     FingerMotor LfingerObj(portLeftFingers, L_FINGER, XMLLeftFingers);
     FingerMotor RfingerObj(portRightFingers, R_FINGER, XMLRightFingers);
     FingerMotor HandFootObj(portHandFoot, HAND, XMLHandFoot);
+
+    dBPort dBObj(portDb);
+    std::thread receiver(receiveBytes, std::ref(dBObj));
+
     usleep(1000000);
     std::cout << "score loading success!" << std::endl;
     std::cout << "tempo : " << SCORE::Tempo << " time signature : " << SCORE::Beats << "/" << SCORE::BeatType << std::endl;
@@ -135,13 +141,30 @@ int main() {
         SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
-            SCORE::pressKey(LfingerObj, 11, 0x30);
-            usleep(1000000);
-            SCORE::releaseKey(LfingerObj, 11, 0x30);
-            usleep(1000000);
+            //SCORE::pressKey(LfingerObj, 11, 0x30);
+            //usleep(1000000);
+            //SCORE::releaseKey(LfingerObj, 11, 0x30);
+            //usleep(1000000);
+            if(dBObj.writeByte(0x0A)){
+                std::cout << "sent 0x0A" << std::endl;
+                usleep(500000);
+                SCORE::pressKey(LfingerObj, 7, 0x30);
+                dBObj.waitForData();
+                int receivedValue = static_cast<int>(dBObj.getReceivedData());
+                std::cout << "Received response: " << receivedValue << std::endl;
+                SCORE::RPM = receivedValue;
+                SCORE::releaseKey(LfingerObj, 7, 0x30);
+            }
+            else{
+                std::cout << "failed to send 0x0A" << std::endl;
+            }
 
-            SCORE::RPM = 50; //dB test 결과값을 여기에 저장
-            _isdBTestDone=1;
+            usleep(500000);
+             //dB test 결과값을 여기에 저장
+            response = 0;
+            std::cout << "Finish dB Test? [Y/n]" << std::endl;
+            std::cin >> response;
+            if(response == 'y') _isdBTestDone=1;
         }
         std::cout << "dB Test done!" << std::endl;
         usleep(1000000);

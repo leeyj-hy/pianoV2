@@ -27,7 +27,44 @@ namespace SCORE {
     int BeatType = 0;
     int RPM = 50;
 
+    /*static const bool isBlank[] = {
+        true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true, true, true, true, true, false, true, true, true, true, true, true, true, false,
+        true,
+        };
+    */
+   static const bool isBlank[]={
+    true, true, true, false, true, true, true, true, true, false, true, true, true, true,
+   };
+    static const int KeyIndex[] = {
+        1, 2, 3, 
+    };
 
+    struct blancKey{
+        int firstblanc;
+        int secondblanc;
+    };
+
+    blancKey blankIndex[12] = {
+        {-1, -1},
+        {4, 10},
+        {-1, -1},
+        {2, 8},
+        {6, 14},
+        {-1, -1},
+        {4, 12},
+        {-1, -1},
+        {2, 10},
+        {8, 14},
+        {-1, -1},
+        {6, 12},
+    };
 
     struct NOTE {
         int barNum;
@@ -282,7 +319,8 @@ namespace SCORE {
         std::cout << "dB Test start" << std::endl;
         usleep(1000000);
         std::cout << "move to 4th octave" << std::endl;
-        int time4sleep = moveToOctave(motor, 4, defaultLinearVel, 1, 1);   //move left hand to 4th octave
+        //int time4sleep = moveToOctave(motor, 4, defaultLinearVel, 1, 1);   //move left hand to 4th octave
+        int time4sleep = moveToWhiteKey(motor, 40, defaultLinearVel, 1, 1);   //move left hand to 4th octave
         std::cout << "Sleep for "<< time4sleep*linearTimeConst << "ms" << std::endl;
         usleep(time4sleep*linearTimeConst*1000);
         std::cout << "ready for octave test" << std::endl;
@@ -454,12 +492,36 @@ namespace SCORE {
         }
         
         if(ID == 1){
-            std::cout << "lhand curr " << whiteToFullKey(currentPosL) <<" press " << noteH - whiteToFullKey(currentPosL)<< std::endl;
-            releaseKey(lfinger, noteH - whiteToFullKey(currentPosL), RPM);
+            std::cout << "lhand curr " << whiteToFullKey(currentPosL) <<" press " << noteH - whiteToFullKey(currentPosL)+1;
+            int keyindex = 0;
+            if(blankIndex[whiteToFullKey(currentPosL)%12].firstblanc <= noteH - whiteToFullKey(currentPosL)+1 
+            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > noteH - whiteToFullKey(currentPosL)+1){
+                keyindex = noteH - whiteToFullKey(currentPosL)+2;
+            }
+            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= noteH - whiteToFullKey(currentPosL)+1){
+                keyindex = noteH - whiteToFullKey(currentPosL)+3;
+            }
+            else{
+                keyindex = noteH - whiteToFullKey(currentPosL)+1;
+            }
+            std::cout << " keyindex " << keyindex << std::endl;
+            pressKey(lfinger, keyindex, RPM);
         }
         else if(ID == 2){
-            std::cout << "rhand curr "<< 44-currentPosR <<" press "<< noteH - whiteToFullKey(44-currentPosR) << std::endl;
-            releaseKey(rfinger, noteH - 88+whiteToFullKey(currentPosR+7), RPM);
+            std::cout << "rhand curr "<< whiteToFullKey(44-currentPosR) <<" press "<< noteH - whiteToFullKey(44-currentPosR)+1;
+            int keyindex = 0;
+            if(blankIndex[whiteToFullKey(44-currentPosR)%12].firstblanc <= noteH - whiteToFullKey(44-currentPosR)+1 
+            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+1){
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+2;
+            }
+            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+1){
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+3;
+            }
+            else{
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+1;
+            }
+            std::cout << " keyindex " << keyindex << std::endl;
+            pressKey(rfinger, keyindex, RPM);
         }
         else{
             std::cerr << "Invalid ID" << std::endl;
@@ -479,10 +541,35 @@ namespace SCORE {
         }
         
         if(ID == 1){
-            pressKey(lfinger, noteH - whiteToFullKey(currentPosL), RPM);
+            int keyindex = 0;
+            if(blankIndex[whiteToFullKey(currentPosL)%12].firstblanc <= noteH - whiteToFullKey(currentPosL)+1 
+            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > noteH - whiteToFullKey(currentPosL)+1){
+                keyindex = noteH - whiteToFullKey(currentPosL)+2;
+            }
+            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= noteH - whiteToFullKey(currentPosL)+1){
+                keyindex = noteH - whiteToFullKey(currentPosL)+3;
+            }
+            else{
+                keyindex = noteH - whiteToFullKey(currentPosL)+1;
+            }
+            std::cout << " keyindex " << keyindex << std::endl;
+            releaseKey(lfinger, keyindex, RPM);
         }
         else if(ID == 2){
-            pressKey(rfinger, noteH - 88+whiteToFullKey(currentPosR+7), RPM);
+            std::cout << "rhand curr "<< whiteToFullKey(44-currentPosR) <<" press "<< noteH - whiteToFullKey(44-currentPosR)+1;
+            int keyindex = 0;
+            if(blankIndex[whiteToFullKey(44-currentPosR)%12].firstblanc <= noteH - whiteToFullKey(44-currentPosR)+1 
+            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+1){
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+2;
+            }
+            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+1){
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+3;
+            }
+            else{
+                keyindex = noteH - whiteToFullKey(44-currentPosR)+1;
+            }
+            std::cout << " keyindex " << keyindex << std::endl;
+            releaseKey(rfinger, keyindex, RPM);
         }
         else{
             std::cerr << "Invalid ID" << std::endl;

@@ -199,7 +199,7 @@ void FingerMotor::InitializeAll() {
 
     for (const auto& _id : motorParameters) {
         setPosition((uint8_t)_id.id, 0x10, (uint8_t)_id.homePosition);
-        usleep(50000);
+        usleep(100000);
     }
 }
 
@@ -252,8 +252,8 @@ void FingerMotor::ComPortHandler(const std::string& portName, std::function<void
         return;
     }
 
-    cfsetospeed(&tty, B115200);
-    cfsetispeed(&tty, B115200);
+    cfsetospeed(&tty, B1000000);
+    cfsetispeed(&tty, B1000000);
 
     tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;
     tty.c_iflag &= ~IGNBRK;
