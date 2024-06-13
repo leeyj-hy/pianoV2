@@ -423,7 +423,10 @@ namespace SCORE {
                         notes[i].moveOctave = 1;
                         int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand to 4th octave
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
-                        notes[prevID1].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress;
+                        notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress;
+                        if(notes[prevID1].key == notes[i].key){
+                            notes[prevID1].timeHold = notes[prevID1].timeHold - notes[prevID1].timePress - notes[i].timePress;
+                        }
                         std::cout << prevID1 << " LHold Time: " << notes[prevID1].timeHold << std::endl;
                     }
                     else if(whiteToFullKey(currModule1) + 11 < notes[i].key){   //left hand move octave to right (fullkey)
@@ -433,6 +436,9 @@ namespace SCORE {
                         int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand to 4th octave
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
                         notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress;;
+                        if(notes[prevID1].key == notes[i].key){
+                            notes[prevID1].timeHold = notes[prevID1].timeHold - notes[prevID1].timePress - notes[i].timePress;
+                        }
                         std::cout << prevID1 << " RHold Time: " << notes[prevID1].timeHold << std::endl;
                     }
                     
@@ -449,6 +455,9 @@ namespace SCORE {
                         int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand to 4th octave
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
                         notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress;;
+                        if(notes[prevID2].key == notes[i].key){
+                            notes[prevID2].timeHold = notes[prevID2].timeHold - notes[prevID2].timePress - notes[i].timePress;
+                        }
                         std::cout << prevID2 << " LHold Time: " << notes[prevID2].timeHold << std::endl;
                     }
                     else if(whiteToFullKey(44 - currModule2) + 12 < notes[i].key){   //right hand move octave to right(fullkey)
@@ -457,6 +466,9 @@ namespace SCORE {
                         int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand to 4th octave
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
                         notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress;
+                        if(notes[prevID2].key == notes[i].key){
+                            notes[prevID2].timeHold = notes[prevID2].timeHold - notes[prevID2].timePress - notes[i].timePress;
+                        }
                         std::cout << prevID2 << " RHold Time: " << notes[prevID2].timeHold << std::endl;
                     }
                     

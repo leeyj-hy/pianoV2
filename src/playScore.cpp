@@ -49,7 +49,6 @@ int main() {
     FingerMotor HandFootObj(portHandFoot, HAND, XMLHandFoot);
 
     dBPort dBObj(portDb);
-    std::thread receiver(receiveBytes, std::ref(dBObj));
 
     usleep(1000000);
     std::cout << "score loading success!" << std::endl;
@@ -141,16 +140,11 @@ int main() {
         SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
         while(!_isdBTestDone){
-            //SCORE::pressKey(LfingerObj, 11, 0x30);
-            //usleep(1000000);
-            //SCORE::releaseKey(LfingerObj, 11, 0x30);
-            //usleep(1000000);
-            if(dBObj.writeByte(0x0A)){
+            if(dBObj.sendByte(0x0A)){
                 std::cout << "sent 0x0A" << std::endl;
                 usleep(500000);
                 SCORE::pressKey(LfingerObj, 7, 0x30);
-                dBObj.waitForData();
-                int receivedValue = static_cast<int>(dBObj.getReceivedData());
+                int receivedValue = dBObj.getResponse();
                 std::cout << "Received response: " << receivedValue << std::endl;
                 SCORE::RPM = receivedValue;
                 SCORE::releaseKey(LfingerObj, 7, 0x30);
@@ -184,7 +178,7 @@ int main() {
     if(response == 'y' || response == 'Y'){
         std::cout << "Start Playing!" << std::endl;
         
-        //SCORE::calKey(notes, HandFootObj);
+        SCORE::calKey(notes, HandFootObj);
         SCORE::currentPosL = 0;
         SCORE::currentPosR = 0;
         setTimerStartPoint();
