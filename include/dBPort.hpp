@@ -19,6 +19,7 @@ public:
     uint8_t receiveByte();
     int getResponse();
 
+
 private:
     std::string portName;
     int fd;

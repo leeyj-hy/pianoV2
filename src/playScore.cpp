@@ -132,6 +132,11 @@ int main() {
     RfingerObj.startFeedback();
     HandFootObj.startFeedback();
 
+    std::vector<double> f4   = {100, 100.5016, 90, 90.5017, 80, 80.5017, 75, 75.5017, 70, 70.5017, 60, 60.5017, 50, 50.5017, 40, 40.5017}; // fff, ff, f, mf, mp, p, pp (f4, f4_1)
+    std::vector<int> rpm_lower = {30,  30,  30,  30,  30,  30,  30,  30, 30,  30,  30,  30,  30,  30,  30,  30};
+    std::vector<int> rpm_upper = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+    std::vector<int> result_rpm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
     response = 0;
     std::cout << "Start dB Test? [Y/n]" << std::endl;
     std::cin >> response;
@@ -139,28 +144,120 @@ int main() {
     if(response == 'y' || response == 'Y'){
         SCORE::dbTest(HandFootObj);
         int _isdBTestDone = 0;
+        double DBERROR = 1.5;
         while(!_isdBTestDone){
-            if(dBObj.sendByte(0x0A)){
-                std::cout << "sent 0x0A" << std::endl;
-                usleep(500000);
-                SCORE::pressKey(LfingerObj, 7, 0x30);
-                int receivedValue = dBObj.getResponse();
-                std::cout << "Received response: " << receivedValue << std::endl;
-                SCORE::RPM = receivedValue;
-                SCORE::releaseKey(LfingerObj, 7, 0x30);
-            }
-            else{
-                std::cout << "failed to send 0x0A" << std::endl;
-            }
+            // if(dBObj.sendByte(0x0A)){
+            //     std::cout << "sent 0x0A" << std::endl;
+            //     usleep(500000);
+            //     SCORE::pressKey(LfingerObj, 7, 0x30);
+            //     int receivedValue = dBObj.getResponse();
+            //     std::cout << "Received response: " << receivedValue << std::endl;
+            //     SCORE::RPM = receivedValue;
+            //     SCORE::releaseKey(LfingerObj, 7, 0x30);
+            //     usleep(500000);
+            // }
+            // else{
+            //     std::cout << "failed to send 0x0A" << std::endl;
+            // }
 
-            usleep(500000);
-             //dB test 결과값을 여기에 저장
-            response = 0;
-            std::cout << "Finish dB Test? [Y/n]" << std::endl;
-            std::cin >> response;
-            if(response == 'y') _isdBTestDone=1;
+            // usleep(500000); //dB test 결과값을 여기에 저장
+            // response = 0;
+            // std::cout << "Finish dB Test? [Y/n]" << std::endl;
+            // std::cin >> response;
+            // if(response == 'y') _isdBTestDone=1;
+
+            
+            for(unsigned int i = 0; i < f4.size(); i++)
+            {
+                double prev_l_rpm = 0;
+                double prev_u_rpm = 0;
+                double prev_l_dB = 0;
+                double prev_u_dB = 0;
+                do
+                {
+                    SCORE::RPM = int(rpm_lower[i]);
+                    ////// dbMeter //////
+                    if(dBObj.sendByte(0x05)){
+                        std::cout << "sent 0x05" << std::endl;
+                        usleep(500000);
+                    }
+                    else std::cout << "failed to send 0x05" << std::endl;
+                    
+                    if (i % 2 == 0)
+                        SCORE::pressKey(LfingerObj, 7, SCORE::RPM); // press f4
+                    else
+                        SCORE::pressKey(LfingerObj, 8, SCORE::RPM); // press f4_1
+                    
+                    double l_dB = dBObj.getResponse(); // get dB
+                    usleep(500000);
+                    SCORE::releaseKey(LfingerObj, 7, 0x30);
+                    SCORE::releaseKey(LfingerObj, 8, 0x30);
+
+                    SCORE::RPM = int(rpm_upper[i]);
+                    std::cout << i << " " << rpm_upper[i] << std::endl;
+                    ////// dbMeter //////
+                    
+                    if(dBObj.sendByte(0x05)){
+                        std::cout << "sent 0x05" << std::endl;
+                        usleep(500000);
+                    }
+                    else std::cout << "failed to send 0x05" << std::endl;
+                    
+                    if (i % 2 == 0)
+                        SCORE::pressKey(LfingerObj, 7, SCORE::RPM); // press f4
+                    else
+                        SCORE::pressKey(LfingerObj, 8, SCORE::RPM); // press f4_1
+                    
+                    double u_dB = dBObj.getResponse();; // get dB
+                    usleep(500000);
+                    SCORE::releaseKey(LfingerObj, 7, 0x30);
+                    SCORE::releaseKey(LfingerObj, 8, 0x30);
+                    if (l_dB - f4[i] > DBERROR)
+                    {
+                        rpm_lower[i] = prev_l_rpm;
+                        prev_l_dB = l_dB;
+                    }
+                    if (u_dB - f4[i] < DBERROR)
+                    {
+                        rpm_upper[i] = prev_u_rpm;
+                        prev_u_dB = u_dB;
+                    }
+
+                    int mid_rpm = int((rpm_lower[i] + rpm_upper[i])/2.0);
+
+                    prev_l_rpm = rpm_lower[i];
+                    prev_u_rpm = rpm_upper[i];
+                    prev_l_dB = l_dB;
+                    prev_u_dB = u_dB;
+                    
+                    if ((l_dB + u_dB)/2 >= f4[i]) 
+                    {
+                        rpm_upper[i] = int((mid_rpm + rpm_upper[i])/2);
+                        rpm_lower[i] = mid_rpm;
+                    }
+                    else
+                    {
+                        rpm_lower[i] = int((mid_rpm + rpm_lower[i])/2);
+                        rpm_upper[i] = mid_rpm;
+                    }
+                }
+                while ((abs(prev_l_dB - f4[i]) > DBERROR) || (abs(prev_u_dB - f4[i]) > DBERROR));
+
+                if (abs(prev_l_dB - f4[i]) > abs(prev_u_dB - f4[i]))
+                    result_rpm[i] = prev_u_rpm;
+                else
+                    result_rpm[i] = prev_l_rpm;
+
+            }
+            SCORE::RPM = 50; //dB test 결과값을 여기에 저장
+            _isdBTestDone=1;
         }
         std::cout << "dB Test done!" << std::endl;
+        for(auto &rpm : result_rpm){
+            std::cout << rpm << " " ;
+
+        }
+            std::cout << std::endl;
         usleep(1000000);
         int tSleep = SCORE::moveToWhiteKey(HandFootObj, 0, defaultLinearVel, 1, 1) * linearTimeConst;
         std::cout << "Sleep for "<< tSleep << "ms" << std::endl;
