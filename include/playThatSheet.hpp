@@ -14,8 +14,11 @@
 #define linearTimeConst 85    //how many ms to move 1 white key
 #define defaultLinearVel 0xff   //default velocity
 
-#define posPress 5
-#define posRelease -25
+#define posPress 45
+#define posRelease 0   
+
+#define posPedalPress 0x01
+#define posPedalRelease 0x07
 
 namespace SCORE {
 
@@ -25,7 +28,9 @@ namespace SCORE {
     int Tempo = 0;
     int Beats = 0;
     int BeatType = 0;
-    int RPM = 50;
+    int RPM = 255;
+    int RPM_w = 255;
+    int RPM_b = 255;
 
     /*static const bool isBlank[] = {
         true, true, true, false,
@@ -39,6 +44,10 @@ namespace SCORE {
         true,
         };
     */
+
+   static const bool isBlack[] = {
+        false, true, false, false, true, false, true, false, false, true, false, true // G, G#, A, A#, B, C, C#, D, D#, E, F, F#
+    };
    static const bool isBlank[]={
     true, true, true, false, true, true, true, true, true, false, true, true, true, true,
    };
@@ -73,8 +82,11 @@ namespace SCORE {
         int octave;
         int key;
         float duration;
-        int articulation;
+        float articulation_t;
+        float articulation_p;
+        int pedal = 0;
         int ID;
+        int note_rpm;
 
         long long SP_finger=0;    //start point of finger
         long long SP_module=0;    //start point of module
@@ -120,8 +132,10 @@ namespace SCORE {
                 XMLElement* beatType = time->FirstChildElement("beat-type");
                 BeatType = beatType->IntText();
             }
-            XMLElement* defaultRpm = head->FirstChildElement("defaultRpm");
-            
+            XMLElement* defaultRpm_w = head->FirstChildElement("defaultRpm_w");
+            RPM_w = defaultRpm_w->IntText();
+            XMLElement* defaultRpm_b = head->FirstChildElement("defaultRpm_b");
+            RPM_b = defaultRpm_b->IntText();
             
         }
         std::cout << "reading head done" << std::endl;
@@ -156,8 +170,12 @@ namespace SCORE {
                     }
                     XMLElement* duration = note->FirstChildElement("duration");
                     if (duration) noteData.duration = duration->FloatText();
-                    XMLElement* articulation = note->FirstChildElement("articulation");
-                    if (articulation) noteData.articulation = articulation->IntText();
+                    XMLElement* articulation_t = note->FirstChildElement("articulation_t");
+                    if (articulation_t) noteData.articulation_t = articulation_t->FloatText();
+                    XMLElement* articulation_p = note->FirstChildElement("articulation_p");
+                    if (articulation_p) noteData.articulation_p = articulation_p->FloatText();
+                    XMLElement* pedal = note->FirstChildElement("pedal");
+                    if (pedal) noteData.pedal = pedal->IntText();
 
                     notes.push_back(noteData);
                 }
@@ -198,6 +216,20 @@ namespace SCORE {
         uint8_t goalPosition = posRelease;
 
         motor.setPosition(key, rpm, goalPosition);
+    }
+
+    /// @brief 페달을 누르는 함수
+    /// @param motor 
+    /// @param rpm 
+    void pressPedal(FingerMotor &motor, uint8_t rpm) {
+        motor.setPosition(3, rpm, posPedalPress);
+    }
+
+    /// @brief 페달을 떼는 함수
+    /// @param motor 
+    /// @param rpm 
+    void releasePedal(FingerMotor &motor, uint8_t rpm) {
+        motor.setPosition(3, rpm, posPedalRelease);
     }
 
     /// @brief 옥타브와 rpm을 입력받아 해당 모터를 옥타브로 이동시키는 함수
@@ -293,14 +325,14 @@ namespace SCORE {
         
         if(ID == 1){
             retVal = abs(currentPosL - whiteKey);  //how many steps moved
-            std::cout << currentPosL << " Move to " << (int)whiteKey << " white key ";
+            std::cout << currentPosL << " -> " << (int)whiteKey << "th white ";
             if(activeMotor) motor.setPosition(ID, rpm, currentPosL-whiteKey);
             currentPosL = whiteKey;
             return retVal;
         }
         else if(ID == 2){
             retVal = abs(currentPosR - whiteKey);  //how many steps moved
-            std::cout << currentPosR << " Move to " << (int)whiteKey << " white key ";
+            std::cout << currentPosR << " -> " << (int)whiteKey << "th white ";
             if(activeMotor) motor.setPosition(ID, rpm, currentPosR-whiteKey);
             currentPosR = whiteKey;
             return retVal;
@@ -320,7 +352,7 @@ namespace SCORE {
         usleep(1000000);
         std::cout << "move to 4th octave" << std::endl;
         //int time4sleep = moveToOctave(motor, 4, defaultLinearVel, 1, 1);   //move left hand to 4th octave
-        int time4sleep = moveToWhiteKey(motor, 40, defaultLinearVel, 1, 1);   //move left hand to 4th octave
+        int time4sleep = moveToWhiteKey(motor, 23, defaultLinearVel, 1, 1);   //move left hand to 4th octave
         std::cout << "Sleep for "<< time4sleep*linearTimeConst << "ms" << std::endl;
         usleep(time4sleep*linearTimeConst*1000);
         std::cout << "ready for octave test" << std::endl;
@@ -390,11 +422,13 @@ namespace SCORE {
     }
 
 
-     void calKey(std::vector<SCORE::NOTE>& notes, FingerMotor &motor) {
+    void calKey(std::vector<SCORE::NOTE>& notes, FingerMotor &motor) {
         notes[0].SP_finger = 0;
         notes[0].SP_module = 0;
         int prevID1 = 0;
         int prevID2 = 0;
+        int pprevID1 = 0;
+        int pprevID2 = 0;
         int currModule1 = 0;
         int currModule2 = 0;
 
@@ -406,45 +440,68 @@ namespace SCORE {
         }
         std::cout << "Calculating Key " <<  notes.size() << std::endl;
         for(size_t i=0; i<notes.size(); i++){
-            notes[i].timeHold = notes[i].duration * 60000 / Tempo;     //time to hold, mSec
-            notes[i].timePress = (int)(RPM * 60 / 1000);    //degree per mS no Articulation
+            int RPM;
+            if(isBlack[(notes[i].key - 1) % 12]) {
+                std::cout<<i<<"black key " << notes[i].key;
+                RPM = RPM_b;
+                notes[i].note_rpm = RPM_b;
+            }
+            else {
+                RPM = RPM_w;
+                std::cout<<i<<"white key "<< notes[i].key;
+                notes[i].note_rpm = RPM_w;
+            }
+            notes[i].timeHold = notes[i].duration * 60000 / Tempo * notes[i].articulation_t;     //time to hold, mSec
+            //notes[i].timePress = (int)( 1000000 / 60 * 8/RPM) * notes[i].articulation_p;    //degree per mS no Articulation
+            notes[i].timePress = (int)(60000 / (RPM * notes[i].articulation_p));    //degree per mS
             notes[i].octave = SCORE::fullToWhiteKey(notes[i].key, notes[i].ID); 
             if(i>0) {
                 
                 if(notes[i].ID == 1 && i > prevID1){    //left hand
-                    notes[i].SP_finger = notes[prevID1].timeHold + notes[prevID1].SP_finger - notes[i].timePress;    //start point of finger
+                    notes[i].SP_finger = notes[prevID1].timeHold + notes[prevID1].timePress +  notes[prevID1].SP_finger - notes[i].timePress;    //start point of finger
                     
                     if(notes[i].key == 0){ //rest
                         //notes[i].SP_module = notes[prevID1].timeHold + notes[prevID1].SP_module - notes[i].timePress;
                     }
                     else if(whiteToFullKey(currModule1) >  notes[i].key){   //left hand move octave to left (fullkey)
                         std::cout << whiteToFullKey(currModule1) << std::endl;
-                        currModule1 = notes[i].octave;  //pose in white key
+                        //currModule1 = notes[i].octave;  //pose in white key
+                        currModule1 = notes[i].octave - 6;
                         notes[i].moveOctave = 1;
-                        int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand to 4th octave
+                        int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand 
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
-                        notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress;
+                        notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress - notes[i].timePress;
                         if(notes[prevID1].key == notes[i].key){
                             notes[prevID1].timeHold = notes[prevID1].timeHold - notes[prevID1].timePress - notes[i].timePress;
+                            std::cout << "same key "; 
                         }
-                        std::cout << prevID1 << " LHold Time: " << notes[prevID1].timeHold << std::endl;
+                        std::cout << prevID1 << "'s new hold Time: " << notes[prevID1].timeHold << std::endl;
                     }
                     else if(whiteToFullKey(currModule1) + 11 < notes[i].key){   //left hand move octave to right (fullkey)
                         std::cout << whiteToFullKey(currModule1) << std::endl;
                         currModule1 = notes[i].octave - 6; //pose in white key
                         notes[i].moveOctave = 1;
-                        int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand to 4th octave
+                        int time2sleep = moveToWhiteKey(motor,currModule1 , defaultLinearVel, 1, 0);   //move left hand 
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
-                        notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress;;
+                        notes[prevID1].timeHold = notes[prevID1].timeHold - time2sleep * linearTimeConst - notes[prevID1].timePress - notes[i].timePress;
                         if(notes[prevID1].key == notes[i].key){
                             notes[prevID1].timeHold = notes[prevID1].timeHold - notes[prevID1].timePress - notes[i].timePress;
+                            std::cout << "same key "; 
                         }
-                        std::cout << prevID1 << " RHold Time: " << notes[prevID1].timeHold << std::endl;
+                        std::cout << prevID1 << "'s new hold Time: " << notes[prevID1].timeHold << std::endl;
                     }
-                    
+                    if(notes[prevID1].key == notes[i].key){
+                            notes[prevID1].timeHold = notes[prevID1].timeHold - notes[prevID1].timePress - notes[i].timePress;
+                            std::cout << "same key "; 
+                        }
+
+                    if(notes[pprevID1].key == notes[i].key && notes[pprevID1].SP_finger + (1+notes[pprevID1].articulation_p)*notes[pprevID1].timePress + notes[pprevID1].timeHold > notes[i].SP_finger){
+                        notes[pprevID1].timeHold = notes[pprevID1].timeHold - notes[i].timePress;
+                        std::cout << "ssame key ";
+                    }
                 } 
-                else if(notes[i].ID == 2 ){     //right hand
-                    notes[i].SP_finger = notes[prevID2].timeHold + notes[prevID2].SP_finger - notes[i].timePress;
+                else if(notes[i].ID == 2 && i > prevID2){     //right hand
+                    notes[i].SP_finger = notes[prevID2].timeHold + notes[prevID2].timePress + notes[prevID2].SP_finger - notes[i].timePress;
                     
                     if(notes[i].key == 0){ //rest
                         //notes[i].SP_module = notes[prevID2].timeHold + notes[prevID2].SP_module - notes[i].timePress;
@@ -452,41 +509,55 @@ namespace SCORE {
                     else if(whiteToFullKey(44 - currModule2) >  notes[i].key){   //right hand move octave to left(fullkey)
                         currModule2 = 44 - notes[i].octave;//pose in white key
                         notes[i].moveOctave = 1;
-                        int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand to 4th octave
+                        int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
-                        notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress;;
+                        notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress - notes[i].timePress;
                         if(notes[prevID2].key == notes[i].key){
                             notes[prevID2].timeHold = notes[prevID2].timeHold - notes[prevID2].timePress - notes[i].timePress;
+                            std::cout << "same key "; 
                         }
-                        std::cout << prevID2 << " LHold Time: " << notes[prevID2].timeHold << std::endl;
+                        std::cout << prevID2 << "'s new hold Time: " << notes[prevID2].timeHold << std::endl;
                     }
                     else if(whiteToFullKey(44 - currModule2) + 12 < notes[i].key){   //right hand move octave to right(fullkey)
                         currModule2 = 44 - notes[i].octave;//pose in white key
                         notes[i].moveOctave = 1;
-                        int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand to 4th octave
+                        int time2sleep = moveToWhiteKey(motor, currModule2, defaultLinearVel, 2, 0);   //move left hand 
                         notes[i].SP_module = notes[i].SP_finger - time2sleep * linearTimeConst;
-                        notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress;
+                        notes[prevID2].timeHold = notes[prevID2].timeHold - time2sleep * linearTimeConst - notes[prevID2].timePress - notes[i].timePress;
                         if(notes[prevID2].key == notes[i].key){
                             notes[prevID2].timeHold = notes[prevID2].timeHold - notes[prevID2].timePress - notes[i].timePress;
+                            std::cout << "same key ";
                         }
-                        std::cout << prevID2 << " RHold Time: " << notes[prevID2].timeHold << std::endl;
+                        std::cout << prevID2 << "'s new hold Time: " << notes[prevID2].timeHold << std::endl;
                     }
-                    
+                    if(notes[prevID2].key == notes[i].key){
+                            notes[prevID2].timeHold = notes[prevID2].timeHold - notes[prevID2].timePress - notes[i].timePress;
+                            std::cout << "same key ";
+                        }
+                    if(notes[pprevID2].key == notes[i].key && notes[pprevID2].SP_finger + (1+notes[pprevID2].articulation_p)*notes[pprevID2].timePress + notes[pprevID2].timeHold > notes[i].SP_finger){
+                        notes[pprevID2].timeHold = notes[pprevID2].timeHold - notes[i].timePress;
+                        std::cout << "ssame key ";
+                    }
+                    if(notes[pprevID2].key == notes[i].key){
+                        
+                    }
                 } 
             }
 
             if(notes[i].ID == 1) {
+                pprevID1 = prevID1;
                 prevID1 = i;
                 
                 }
             else if(notes[i].ID == 2) {
+                pprevID2 = prevID2;
                 prevID2 = i;
                 
                 }
 
             
         
-            std::cout <<"ID : " << notes[i].ID <<  " Bar : " << notes[i].barNum << " Note : " << notes[i].noteNum << " key : " << notes[i].key  << " duration : " << notes[i].duration<< " octave : " << notes[i].octave  << " timeH : " << notes[i].timeHold << " spF : " << notes[i].SP_finger <<  " spM: " << notes[i].SP_module << " mv : "<<notes[i].moveOctave <<  std::endl;
+            std::cout <<"ID : " << notes[i].ID <<  " Bar : " << notes[i].barNum << " Note : " << notes[i].noteNum << " key : " << notes[i].key  << " duration : " << notes[i].duration<< " octave : " << notes[i].octave  << " timeH : " << notes[i].timeHold << " spF : " << notes[i].SP_finger <<  " spM: " << notes[i].SP_module << " tP: "<< notes[i].timePress <<" mv: "<<notes[i].moveOctave <<  std::endl;
 
         }
     }
@@ -497,7 +568,7 @@ namespace SCORE {
     /// @param rfinger : 오른손 모터 객체
     /// @param ID : 손의 ID
     /// @param noteH : 누르는 음의 높이
-    void pressNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH) {
+    void pressNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH, int rpm) {
         if(noteH == 0){
             std::cout << "Rest" << std::endl;
             return;
@@ -505,35 +576,36 @@ namespace SCORE {
         
         if(ID == 1){
             std::cout << "lhand curr " << whiteToFullKey(currentPosL) <<" press " << noteH - whiteToFullKey(currentPosL)+1;
+            std::cout << " index1: " << blankIndex[whiteToFullKey(currentPosL)%12].firstblanc << " ,2: " << blankIndex[whiteToFullKey(currentPosL)%12].secondblanc << std::endl;
             int keyindex = 0;
-            if(blankIndex[whiteToFullKey(currentPosL)%12].firstblanc <= noteH - whiteToFullKey(currentPosL)+1 
-            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > noteH - whiteToFullKey(currentPosL)+1){
+            if(blankIndex[whiteToFullKey(currentPosL)%12].firstblanc <= (noteH - whiteToFullKey(currentPosL)+1) 
+            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > (noteH - whiteToFullKey(currentPosL)+2)){
                 keyindex = noteH - whiteToFullKey(currentPosL)+2;
             }
-            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= noteH - whiteToFullKey(currentPosL)+1){
+            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= (noteH - whiteToFullKey(currentPosL)+2)){
                 keyindex = noteH - whiteToFullKey(currentPosL)+3;
             }
             else{
                 keyindex = noteH - whiteToFullKey(currentPosL)+1;
             }
             std::cout << " keyindex " << keyindex << std::endl;
-            pressKey(lfinger, keyindex, RPM);
+            pressKey(lfinger, keyindex, rpm);
         }
         else if(ID == 2){
             std::cout << "rhand curr "<< whiteToFullKey(44-currentPosR) <<" press "<< noteH - whiteToFullKey(44-currentPosR)+1;
             int keyindex = 0;
             if(blankIndex[whiteToFullKey(44-currentPosR)%12].firstblanc <= noteH - whiteToFullKey(44-currentPosR)+1 
-            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+1){
+            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+2){
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+2;
             }
-            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+1){
+            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+2){
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+3;
             }
             else{
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+1;
             }
             std::cout << " keyindex " << keyindex << std::endl;
-            pressKey(rfinger, keyindex, RPM);
+            pressKey(rfinger, keyindex, rpm);
         }
         else{
             std::cerr << "Invalid ID" << std::endl;
@@ -546,7 +618,7 @@ namespace SCORE {
     /// @param rfinger : 오른손 디바이스 객체
     /// @param ID : 손의 ID
     /// @param noteH : 떼는 음의 높이
-    void releaseNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH) {
+    void releaseNote(FingerMotor &lfinger, FingerMotor &rfinger, int ID, int noteH, int _RPM) {
         if(noteH == 0){
             std::cout << "Rest" << std::endl;
             return;
@@ -555,33 +627,33 @@ namespace SCORE {
         if(ID == 1){
             int keyindex = 0;
             if(blankIndex[whiteToFullKey(currentPosL)%12].firstblanc <= noteH - whiteToFullKey(currentPosL)+1 
-            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > noteH - whiteToFullKey(currentPosL)+1){
+            && blankIndex[whiteToFullKey(currentPosL)%12].secondblanc > noteH - whiteToFullKey(currentPosL)+2){
                 keyindex = noteH - whiteToFullKey(currentPosL)+2;
             }
-            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= noteH - whiteToFullKey(currentPosL)+1){
+            else if(blankIndex[whiteToFullKey(currentPosL)%12].secondblanc <= noteH - whiteToFullKey(currentPosL)+2){
                 keyindex = noteH - whiteToFullKey(currentPosL)+3;
             }
             else{
                 keyindex = noteH - whiteToFullKey(currentPosL)+1;
             }
             std::cout << " keyindex " << keyindex << std::endl;
-            releaseKey(lfinger, keyindex, RPM);
+            releaseKey(lfinger, keyindex, _RPM);
         }
         else if(ID == 2){
             std::cout << "rhand curr "<< whiteToFullKey(44-currentPosR) <<" press "<< noteH - whiteToFullKey(44-currentPosR)+1;
             int keyindex = 0;
             if(blankIndex[whiteToFullKey(44-currentPosR)%12].firstblanc <= noteH - whiteToFullKey(44-currentPosR)+1 
-            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+1){
+            && blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc > noteH - whiteToFullKey(44-currentPosR)+2){
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+2;
             }
-            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+1){
+            else if(blankIndex[whiteToFullKey(44-currentPosR)%12].secondblanc <= noteH - whiteToFullKey(44-currentPosR)+2){
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+3;
             }
             else{
                 keyindex = noteH - whiteToFullKey(44-currentPosR)+1;
             }
             std::cout << " keyindex " << keyindex << std::endl;
-            releaseKey(rfinger, keyindex, RPM);
+            releaseKey(rfinger, keyindex, _RPM);
         }
         else{
             std::cerr << "Invalid ID" << std::endl;

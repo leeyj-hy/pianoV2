@@ -1,0 +1,776 @@
+<score-partwise>
+    <head>
+        <tempo>15</tempo>
+        <time>
+            <beats>4</beats>
+            <beat-type>4</beat-type>
+        </time>
+        <defaultRpm_w>152</defaultRpm_w>
+        <defaultRpm_b>80</defaultRpm_b>
+    </head>
+    <part>
+        <BAR barNum = "1">
+            <NOTE noteNum = "1">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>0</key>
+                    </pitch>
+                    <duration>2</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>0</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "4">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>65</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "5">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>0</key>
+                    </pitch>
+                    <duration>4</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+        </BAR>
+        <BAR barNum = "2">
+            <NOTE noteNum = "1">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>65</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "4">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "5">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "6">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "7">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "8">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>39</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "9">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>46</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "10">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>51</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "11">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>29</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "12">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>36</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "13">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>41</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+        </BAR>
+        <BAR barNum = "3">
+            <NOTE noteNum = "1">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "4">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>0</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "5">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "6">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "7">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "8">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "9">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "10">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>57</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "11">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>65</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "12">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>31</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "13">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>38</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "14">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>43</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "15">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>38</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "16">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>34</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "17">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>41</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "18">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>46</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+        </BAR>
+        <BAR barNum = "4">
+            <NOTE noteNum = "1">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>65</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "4">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>62</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "5">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "6">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "7">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "8">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>39</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "9">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>46</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "10">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>51</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "11">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>29</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "12">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>36</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "13">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>41</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+        </BAR>
+        <BAR barNum = "5">
+            <NOTE noteNum = "1">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "2">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "3">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "4">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>57</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "5">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "6">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>57</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "7">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "8">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>60</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "9">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>58</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "10">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>57</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "11">
+                <note>
+                    <ID>2</ID>
+                    <pitch>
+                        <key>65</key>
+                    </pitch>
+                    <duration>0.25</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    
+                </note>
+            </NOTE>
+            <NOTE noteNum = "12">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>31</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "13">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>38</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "14">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>43</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "15">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>38</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "16">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>34</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "17">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>41</key>
+                    </pitch>
+                    <duration>0.5</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+            <NOTE noteNum = "18">
+                <note>
+                    <ID>1</ID>
+                    <pitch>
+                        <key>46</key>
+                    </pitch>
+                    <duration>1</duration>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                </note>
+            </NOTE>
+        </BAR>
+    </part>
+</score-partwise>

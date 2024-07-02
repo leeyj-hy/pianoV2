@@ -16,15 +16,15 @@ public:
     dBPort(const std::string& portName);
     ~dBPort();
     bool sendByte(uint8_t byte);
-    uint8_t receiveByte();
-    int getResponse();
+    uint32_t receiveByte();
+    uint32_t getResponse();
 
 
 private:
     std::string portName;
     int fd;
     std::thread readThread;
-    uint8_t receivedByte;
+    uint32_t receivedByte;
     bool receivedFlag;
 
     void readFunction();
@@ -82,13 +82,18 @@ bool dBPort::sendByte(uint8_t byte) {
     else return 0;
 }
 
-uint8_t dBPort::receiveByte() {
-    uint8_t byte;
-    read(fd, &byte, 1);
+uint32_t dBPort::receiveByte() {
+    unsigned char buffer[4]   ;
+    read(fd, &buffer, sizeof(buffer));
+
+    uint32_t byte = (uint32_t(buffer[0]) << 24) |
+                (uint32_t(buffer[1]) << 16) |
+                (uint32_t(buffer[2]) << 8) |
+                uint32_t(buffer[3]);
     return byte;
 }
 
-int dBPort::getResponse() {
+uint32_t dBPort::getResponse() { 
     while (!receivedFlag) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
@@ -98,7 +103,7 @@ int dBPort::getResponse() {
 
 void dBPort::readFunction() {
     while (true) {
-        uint8_t byte = receiveByte();
+        uint16_t byte = receiveByte();
         if (byte != 0) {
             receivedByte = byte;
             receivedFlag = true;

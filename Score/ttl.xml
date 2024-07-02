@@ -1,11 +1,12 @@
 <score-partwise>
     <head>
-        <tempo>30</tempo>
+        <tempo>15</tempo>
         <time>
             <beats>4</beats>
             <beat-type>4</beat-type>
         </time>
-        <defaultRpm>50</defaultRpm>
+        <defaultRpm_w>152</defaultRpm_w>
+        <defaultRpm_b>80</defaultRpm_b>
     </head>
     <part>
         <BAR barNum = "1">
@@ -16,7 +17,8 @@
                         <key>0</key>
                     </pitch>
                     <duration>2</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "2">
@@ -26,7 +28,8 @@
                         <key>0</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "3">
@@ -36,7 +39,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "4">
@@ -46,7 +50,8 @@
                         <key>65</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "5">
@@ -56,7 +61,8 @@
                         <key>0</key>
                     </pitch>
                     <duration>4</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
         </BAR>
@@ -68,7 +74,9 @@
                         <key>62</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "2">
@@ -78,7 +86,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "3">
@@ -88,7 +97,9 @@
                         <key>65</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "4">
@@ -98,7 +109,9 @@
                         <key>62</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "5">
@@ -108,7 +121,8 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "6">
@@ -118,7 +132,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "7">
@@ -128,7 +143,9 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "8">
@@ -138,7 +155,8 @@
                         <key>39</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "9">
@@ -148,7 +166,8 @@
                         <key>46</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "10">
@@ -158,7 +177,8 @@
                         <key>51</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "11">
@@ -168,7 +188,8 @@
                         <key>29</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "12">
@@ -178,7 +199,8 @@
                         <key>36</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "13">
@@ -188,7 +210,8 @@
                         <key>41</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
         </BAR>
@@ -200,7 +223,9 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "2">
@@ -210,7 +235,8 @@
                         <key>62</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "3">
@@ -220,7 +246,9 @@
                         <key>62</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "4">
@@ -230,7 +258,9 @@
                         <key>0</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "5">
@@ -240,7 +270,8 @@
                         <key>62</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "6">
@@ -250,7 +281,8 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "7">
@@ -260,7 +292,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "8">
@@ -270,7 +303,8 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "9">
@@ -280,7 +314,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "10">
@@ -290,7 +325,8 @@
                         <key>57</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "11">
@@ -300,7 +336,9 @@
                         <key>65</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "12">
@@ -310,7 +348,8 @@
                         <key>31</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "13">
@@ -320,7 +359,8 @@
                         <key>38</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "14">
@@ -330,7 +370,8 @@
                         <key>43</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "15">
@@ -340,7 +381,8 @@
                         <key>38</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "16">
@@ -350,7 +392,8 @@
                         <key>34</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "17">
@@ -360,7 +403,8 @@
                         <key>41</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "18">
@@ -370,7 +414,8 @@
                         <key>46</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
         </BAR>
@@ -382,7 +427,9 @@
                         <key>62</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "2">
@@ -392,7 +439,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "3">
@@ -402,7 +450,9 @@
                         <key>65</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "4">
@@ -412,7 +462,9 @@
                         <key>62</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "5">
@@ -422,7 +474,8 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "6">
@@ -432,7 +485,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "7">
@@ -442,7 +496,9 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "8">
@@ -452,7 +508,8 @@
                         <key>39</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "9">
@@ -462,7 +519,8 @@
                         <key>46</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "10">
@@ -472,7 +530,8 @@
                         <key>51</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "11">
@@ -482,7 +541,8 @@
                         <key>29</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "12">
@@ -492,7 +552,8 @@
                         <key>36</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "13">
@@ -502,7 +563,8 @@
                         <key>41</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
         </BAR>
@@ -514,7 +576,9 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "2">
@@ -524,7 +588,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "3">
@@ -534,7 +599,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "4">
@@ -544,7 +610,9 @@
                         <key>57</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "5">
@@ -554,7 +622,9 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>1</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "6">
@@ -564,7 +634,8 @@
                         <key>57</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "7">
@@ -574,7 +645,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "8">
@@ -584,7 +656,8 @@
                         <key>60</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "9">
@@ -594,7 +667,8 @@
                         <key>58</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "10">
@@ -604,7 +678,8 @@
                         <key>57</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "11">
@@ -614,7 +689,9 @@
                         <key>65</key>
                     </pitch>
                     <duration>0.25</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
+                    <pedal>2</pedal>
                 </note>
             </NOTE>
             <NOTE noteNum = "12">
@@ -624,7 +701,8 @@
                         <key>31</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "13">
@@ -634,7 +712,8 @@
                         <key>38</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "14">
@@ -644,7 +723,8 @@
                         <key>43</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "15">
@@ -654,7 +734,8 @@
                         <key>38</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "16">
@@ -664,7 +745,8 @@
                         <key>34</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "17">
@@ -674,7 +756,8 @@
                         <key>41</key>
                     </pitch>
                     <duration>0.5</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
             <NOTE noteNum = "18">
@@ -684,7 +767,8 @@
                         <key>46</key>
                     </pitch>
                     <duration>1</duration>
-                    <articulation>1</articulation>
+                    <articulation_t>1</articulation_t>
+                    <articulation_p>1</articulation_p>
                 </note>
             </NOTE>
         </BAR>

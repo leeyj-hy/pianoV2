@@ -1,77 +1,77 @@
 <Motors>
     <Motor>
         <ID>1</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>1</plusDir>
     </Motor>
     <Motor>
         <ID>2</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>1</plusDir>
     </Motor>
     <Motor>
         <ID>3</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>4</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>5</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>6</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>7</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>8</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>9</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>10</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>11</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>12</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>13</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>14</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
     <Motor>
         <ID>15</ID>
-        <HomePosition>-25</HomePosition>
+        <HomePosition>0</HomePosition>
         <plusDir>0</plusDir>
     </Motor>
 </Motors>

@@ -54,11 +54,11 @@ void WriteMessage(const std::string& portName, std::vector<uint8_t> message) {
     close(fd);
 
     // 터미널에 전송된 메시지를 출력
-    std::cout << "Sent to " << portName << ": ";
+    /*std::cout << "Sent to " << portName << ": ";
     for (uint8_t byte : message) {
         std::cout << "0x" << std::hex << static_cast<int>(byte) << " ";
     }
-    std::cout << std::dec << std::endl;
+    std::cout << std::dec << std::endl;*/
 }
 
 
